@@ -45,6 +45,7 @@ for ip in results:
 			    sys.exit()
 
 print
+print
 if hostAddr: ## empty strings falsify
 	## another node is already host
 	print "host found! at:", hostAddr
