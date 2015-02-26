@@ -1,29 +1,44 @@
 import socket
 from multiprocessing.pool import Pool
 import pingy
+from timeit import default_timer as timer
 
 def ping(host):
-    # ping = subprocess.Popen(['ping', '-w', '500', host],
-    #                         stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-    # out, error = ping.communicate()
-    # return (out, error)
-    pingy.verbose_ping(host, 1, 1)
-    return host
+	return pingy.verbose_ping(host, .5, 1)
 
 
-addresses = ['192.168.0.1', '192.168.0.2', '192.168.0.8'] # etc.
-pool = Pool(10) # Increase number to increase speed and resource consumption
-ping_results = pool.map(ping, addresses)
-print(ping_results)
 
-pool.close()
-pool.join()
+start = timer()
+pool = Pool(75)
+lNodes = {}
+pAddress = []
+subnet = "192.168.0"
+pAddress.extend(range(1, 255))
+pAddress = [subnet + str(address) for address in pAddress]
 
+results = pool.map(ping, pAddress)
 
-# def netbin(count, name):
+for ip in results:
+	if ip[0] > 0:
+		print ip[0]
+		if not ip[0] != "192.168.0.01":
+			try:
+				sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+				result = sock.connect_ex((ip[0], 7878)) ##7878 random port number
+				if result == 0:
+				    print "Port {}: \t Open".format(port)
+				sock.close()
 
-	
+			except KeyboardInterrupt:
+			    print "You pressed Ctrl+C"
+			    sys.exit()
 
+			except socket.gaierror:
+			    print 'Hostname could not be resolved. Exiting'
+			    sys.exit()
 
-# if __name__ == '__main__':
-#     netbin()
+			except socket.error:
+			    print "Couldn't connect to server"
+			    sys.exit()
+
+print(timer()- start)
