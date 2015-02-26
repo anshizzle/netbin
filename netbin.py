@@ -21,11 +21,13 @@ results = pool.map(ping, pAddress)
 for ip in results:
 	if ip[0] > 0:
 		print ip[0]
-		if not ip[0] != "192.168.0.01":
+		 ##if you take out this check will take 150 seconds to run!!!!
+		if not ip[0] != "192.168.0.01"
 			try:
 				sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 				result = sock.connect_ex((ip[0], 7878)) ##7878 random port number
 				if result == 0:
+					## port open!
 				    print "Port {}: \t Open".format(port)
 				sock.close()
 
