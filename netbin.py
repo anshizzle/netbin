@@ -17,18 +17,19 @@ pAddress.extend(range(1, 255))
 pAddress = [subnet + str(address) for address in pAddress]
 
 results = pool.map(ping, pAddress)
-
+hostAddr = ""
 for ip in results:
 	if ip[0] > 0:
-		print ip[0]
+		print "IP:", ip[0], "Delay:", ip[1], "ms"
 		 ##if you take out this check will take 150 seconds to run!!!!
 		if not ip[0] != "192.168.0.01":
 			try:
 				sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 				result = sock.connect_ex((ip[0], 7878)) ##7878 random port number
 				if result == 0:
-					## port open!
-				    print "Port {}: \t Open".format(port)
+					## port open! host found
+					hostAddr = ip[0]
+					print "Port {}: \t Open".format(port)
 				sock.close()
 
 			except KeyboardInterrupt:
@@ -43,4 +44,13 @@ for ip in results:
 			    print "Couldn't connect to server"
 			    sys.exit()
 
-print(timer()- start)
+print
+if hostAddr: ## empty strings falsify
+	## another node is already host
+	print "host found! at:", hostAddr
+else:
+	## no host found make this node host
+	print "NO HOST, MAKE ME HOST"
+
+print
+print "RUNTIME: ", (timer()- start)
