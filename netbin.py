@@ -4,8 +4,9 @@ import pingy
 import netbin_host
 import netbin_client
 import sys
+import netifaces
+import re
 from timeit import default_timer as timer
-
 
 def ping(host):
 	return pingy.verbose_ping(host, .5, 1)
@@ -16,7 +17,25 @@ start = timer()
 pool = Pool(75)
 lNodes = {}
 pAddress = []
-subnet = "192.168.0."
+subnet = ""
+
+enArray = [ x for x in netifaces.interfaces() if x.startswith('en') ]
+if(enArray):
+	for en in enArray:
+		print netifaces.ifaddresses(en).keys()
+		bcTuple = netifaces.ifaddresses(en)
+		if (2 in bcTuple):
+			print bcTuple[2]
+			if ('broadcast' in bcTuple[2][0]):
+				subnet = re.match("^\d+.\d+.[^.]", bcTuple[2][0]['broadcast']).group(0)
+				break
+
+if(subnet == ""):
+	print("NO SUBNET FOUND!")
+	sys.exit()
+
+
+
 pAddress.extend(range(1, 255))
 pAddress = [subnet + str(address) for address in pAddress]
 
@@ -49,11 +68,6 @@ for ip in results:
 		except socket.error:
 		    print "Couldn't connect to server"
 		    sys.exit()
-
-
-
-
-
 
 if hostAddr: 
 	## empty strings falsify
