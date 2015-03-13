@@ -19,6 +19,7 @@ pAddress = []
 subnet = "192.168.0."
 pAddress.extend(range(1, 255))
 pAddress = [subnet + str(address) for address in pAddress]
+PORT = 7878
 
 results = pool.map(ping, pAddress)
 
@@ -31,7 +32,7 @@ for ip in results:
 		try:
 			sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			sock.settimeout(0.5)
-			result = sock.connect_ex((ip[0], 7878)) ##7878 random port number
+			result = sock.connect_ex((ip[0], PORT)) ##7878 random port number
 			if result == 0:
 				## port open! host found
 				hostAddr = ip[0]
