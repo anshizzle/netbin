@@ -3,14 +3,14 @@ import socket
 import os
 from thread import *
 import pdb
-
+import netbin_host
+from netbin_udp import netbin_udp
 next_host = 0
 LISTEN_PORT = 7900
 
 def printError(error):
 	print "ERROR: " + error + ' Terminating.'
 	sys.exit()
-
 
 def receive_file_list(s):
 	raw = s.recv(4096)
@@ -29,84 +29,17 @@ def download_file(s):
 	raw = s.recv(4096)
 	print raw
 
-
-def receive_message(s):
-	message = ""
-	file_name = ""
-	addr = ""
-	try:
-		s.settimeout(None)
-		msg, addr = s.recvfrom(1024)
-		
-		if msg.startsWith("REQUEST"):
-			tmp = msg.split(' ')
-			message = "REQUEST"
-			file_name = tmp[1]
-		elif msg.startsWith("NEXTHOST"):
-			message = "NEXTHOST"
-			file_name = ""
-
-		else:
-			message = "INVALID"
-			file_name = ""
-
-
-		s.sendto("ACK", addr)
-
-	except socket.error:
-		print "Failed to receive message"
-
-	return [message, file_name,addr]
-
-
-
-def client_listener(port):
-	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	host = socket.gethostname()
-
-	print "attempting to bind UDP at host " + host + " with port " + str(port)
-	try:
-		s.bind((host, port))
-	except socket.error, msg:
-		printError('Could not bind passive listener to port.')
-
-
-
-	while 1:
-		data, file_name, addr = receive_message(s)
-		print data + " " + file_name + " from " + addr
-
-
-
-
-
-def start(host, port):
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	result = s.connect_ex((host, port))
-
-	if result > 0: 
-		printError("Could not connect to server.")
-
-	print "Connected to host"
-
-	msg = s.recv(4096)
-
-	if msg == "NEXTHOST":
-		next_host=1
-		print "You are going to be the next host."
-	else:
-		print "Welcome to netbin!"
-
-	start_new_thread(client_listener, (LISTEN_PORT, ))
-
-
+def client_input(is_host, s):
 	while 1:
 		print ">"
 		user_input = raw_input()
 		if user_input == "exit":
+			if is_host:
+				netbin_host.exit()
+			else:
 				break
 		# before sending make sure they are sending legit files before sending
-		if user_input.startswith("upload"):
+		elif user_input.startswith("upload"):
 			fileinput = user_input.split(' ')
 			if len(fileinput) < 2:
 				print "USAGE: Upload requires a filehandle"
@@ -126,13 +59,29 @@ def start(host, port):
 			download_file(s)
 
 		else: 
-			s.sendall(user_input)
-			try:
-				reply = s.recv(4096)
-				print reply
-			except socket.error:
-				printError("Failed to receive the message.")
+			print "Invalid command"
 
-			
+
+def start(host, port):
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	result = s.connect_ex((host, port))
+
+	if result > 0: 
+		printError("Could not connect to server.")
+
+	print "Connected to host"
+
+	msg = s.recv(4096)
+
+	if msg == "NEXTHOST":
+		next_host=1
+		print "You are going to be the next host."
+	else:
+		print "Welcome to netbin!"
+
+	my_udp = netbin_udp(LISTEN_PORT)
+	start_new_thread(my_udp.client_listener, ())
+
+	client_input(False, s)
 
 	s.close()

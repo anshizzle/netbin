@@ -1,8 +1,7 @@
 import socket
 from multiprocessing.pool import Pool
 import pingy
-import netbin_host
-import netbin_client
+
 import sys
 import netifaces
 import re
@@ -19,6 +18,10 @@ lNodes = {}
 pAddress = []
 subnet = ""
 
+import netbin_host
+import netbin_client
+
+##FIND THE SUBNET MASK
 enArray = [ x for x in netifaces.interfaces() if x.startswith('en') ]
 if(enArray):
 	for en in enArray:
@@ -31,12 +34,14 @@ if(enArray):
 
 				break
 
+## IF NO SUBNET FOUND, TERMINATE
 if(subnet == ""):
 	print("NO SUBNET FOUND!")
 	sys.exit()
 
 
 
+#PING ALL ADDRESSES IN SUBNET, FIND HOST
 pAddress.extend(range(1, 255))
 pAddress = [subnet + str(address) for address in pAddress]
 PORT = 7878
@@ -44,6 +49,7 @@ PORT = 7878
 results = pool.map(ping, pAddress)
 
 print [result for result in results if result[0] > 0]
+
 hostAddr = ""
 for ip in results:
 	if ip[0] > 0:
@@ -71,12 +77,14 @@ for ip in results:
 		    print "Couldn't connect to server"
 		    sys.exit()
 
+# IF WE FIND A HOST, RUN NETBIN CLIENT
 if hostAddr: 
 	## empty strings falsify
 	## another node is already host
 	print "host found! at:", hostAddr
 	netbin_client.start(hostAddr, 7878)
 
+#ELSE YOURE A HOST, start HOST PROCESS
 else:
 	netbin_host.start(7878)
 
