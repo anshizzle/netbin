@@ -115,11 +115,13 @@ class netbin_udp:
 		print "attempting to bind UDP at host " + self.host + " with port " + str(self.port)
 		try:
 			self.s.bind((self.host, self.port))
+			print "Successfully bound UDP Passive Listener for Host with Port" + str(self.port)
 		except socket.error, msg:
 			constants.printError('Could not bind passive listener to port.')
 		while 1:
 			msg, data, addr = receive_host_message(self.s)
 			if msg == "ISHOST":
+				print "Received ISHOST Request from " + addr[0]
 				self.s.sendto("IAMHOST", addr)
 			elif msg == "NEEDTCPPORT":
 				self.s.sendto(str(self.available_tcp_ports.pop()), addr)

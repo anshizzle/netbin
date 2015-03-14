@@ -1,6 +1,5 @@
 import socket
 from multiprocessing.pool import Pool
-import pingy
 import netbin_host
 import netbin_client
 import sys
@@ -14,7 +13,10 @@ from thread import *
 
 def send_is_host_query(subnet, sock, m_range):
 	for i in m_range:
-		sock.sendto("ISHOST", (subnet+str(i), constants.LISTEN_PORT))	
+		try:
+			sock.sendto("ISHOST", (subnet+str(i), constants.LISTEN_PORT))
+		except socket.error:
+			print "Socket Error:" + subnet+str(i) 
 	
 	
 start = timer()
@@ -42,8 +44,9 @@ if(subnet == ""):
 
 
 pAddress.extend(range(1, 255))
-chunk_size = len(pAddress)/15
+chunk_size = len(pAddress)/16
 address_groups = [pAddress[i:i+chunk_size] for i in range(0, len(pAddress), chunk_size)]
+print str(address_groups)
 # pAddress = [subnet + str(address) for address in pAddress]
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -55,6 +58,9 @@ sock.settimeout(1)
 while 1:
 	try:
 		result, addr = sock.recvfrom(1024)
+		print "Result from host"
+		print result
+		print str(addr)
 		if result == "IAMHOST":
 			hostAddr = addr[0]
 			break

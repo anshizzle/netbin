@@ -77,7 +77,7 @@ def upload(s, user_input):
 		if os.path.isfile(file_input[1]):
 			file_list = host_function_handler.upload(s,file_list, data, addr)
 		else:
-			print consants.INVALID_FILE_UPLOAD
+			print constants.INVALID_FILE_UPLOAD
 
 # Need to handle all clean up.
 def exit(s):
