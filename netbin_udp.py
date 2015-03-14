@@ -1,6 +1,7 @@
 import socket
 from netbin_tcp import *
 import constants
+from util import *
 
 
 def receive_host_message(s):
@@ -38,6 +39,7 @@ def receive_message(s):
 		s.settimeout(None)
 		msg, addr = s.recvfrom(1024)
 		if msg.startswith("ACK"):
+			printDebug("received file request for " + msg, "udp")
 			message = "REQUEST"
 			file_name = msg.split(' ')[1]
 		elif msg.startswith("TCPOPEN"):
