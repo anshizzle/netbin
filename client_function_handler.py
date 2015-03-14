@@ -1,5 +1,7 @@
 import socket
 import constants
+import pdb
+import os
 
 # User made an upload command
 # If length is less than 2, user did not add a file name.
@@ -24,6 +26,7 @@ def list(s):
 	try:
 		num_files = int(raw.rstrip('-'))
 	except ValueError:
+		print "Invalid Server Response: "
 		print raw
 		return
 
