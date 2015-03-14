@@ -8,7 +8,7 @@ import netbin_client
 next_host = 0
 conns = []
 file_list = [] # Each file is stored as triple with [Addr, FileName]
-
+s = socket.socket()
 
 
 def printError(error):
@@ -87,16 +87,23 @@ def inputthread(socket):
 		user_input = raw_input()
 
 		if user_input == "exit":
-			print "exit received"
-			#PICK A CONNECTION
 
-			[conn.close() for conn in conns]
-			socket.close()
-			os._exit(1)
+			print "exit received"
+			exit()
+
+			
+
+# Need to handle all clean up.
+def exit():
+	#PICK A CONNECTION TO BE THE NEXT HOST.
+	#Send it the info
+
+	[conn.close() for conn in conns]
+	socket.close()
+	os._exit(1)
 
 
 def start(port):
-	s = socket.socket()
 	host = socket.gethostname()
 	# Bind socket to port
 	try:
@@ -107,7 +114,8 @@ def start(port):
 	s.listen(5)
 	print 'Now listening '
 
-	start_new_thread(inputthread, (s,))
+	start_new_thread(inputthread, (s, ))
+
 
 
 	while 1:

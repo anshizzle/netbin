@@ -26,10 +26,6 @@ def receive_file_list(s):
 		file_list = s.recv(4096)
 		print file_list
 
-def download_file(s):
-	raw = s.recv(4096)
-	print raw
-
 
 def receive_message(s):
 	message = ""
@@ -85,23 +81,11 @@ def client_input(is_host):
 
 		# before sending make sure they are sending legit files before sending
 		if user_input.startswith("upload"):
-			fileinput = user_input.split(' ')
-			if len(fileinput) < 2:
-				print "USAGE: Upload requires a filehandle"
-			else:
-				if(os.path.isfile(fileinput[1])):
-					s.sendall("upload "+fileinput[1])
-					with open(fileinput[1], "r+") as content_file:
-						file_data = content_file.read()
-					print file_data
-					#TODO host file data
-					#s.sendall(file_data)
-				else:
-					print "Invalid File Found"
+			client_function_handlers.upload(s, user_input)
 		elif user_input == "list":
-			receive_file_list(s)
+			client_function_handlers.upload(s)
 		elif user_input.startswith("download"):
-			download_file(s)
+			client_function_handler.download_file(s, user_input)
 
 		elif user_input == "exit":
 			if is_host:
