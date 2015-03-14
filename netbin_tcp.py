@@ -61,7 +61,6 @@ class netbin_tcp:
 					except socket.error:
 						printDebug("socket error", "tcp")
 					if not fd:
-						)
 						break
 
 		except IOError:
