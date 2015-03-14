@@ -19,26 +19,38 @@ class netbin_tcp:
 		sock.listen(1)
 
 		# tell the requesting client the connection is open and what port it's on
-		udp_sock.send_tcp_open_msg(self.port, comm_addr)
-
+		udp_sock.send_tcp_open_msg(self.port, comm_addr)		
+		con, file_owner_addr = sock.accept()
+		
 		while True:
-			con, file_owner_addr = sock.accept()
-			try:
-				while True:
+				try:
 					file_data = con.recv(GEN_PACKETLENGTH)
-					if file_data:
-						print file_data
-						break
-			finally:
-				con.close()
+				except socket.error as serr:
+					printDebug("Socket Error " + str(serr.errno))
+				if file_data:
+					print file_data
+					break
+		
+
+		con.close()
+
 
 	def tcp_send(self, fh, addr):
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+		fd = ""
 
 		sock.connect_ex((addr, self.port))
 		try:
-			sock.sendall(file_data)
+			with open(fh, 'rb') as f:
+				fd = f.read()
+				print fd
+
+		except IOError:
+			print "check that the file exists"
+
+
+		try:
+			sock.sendall(fd + constants.FILE_END_SIGNAL)
 		except socket.error:
 			printDebug("Socket error", "tcp")
 
