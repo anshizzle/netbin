@@ -50,11 +50,19 @@ def receive_message(s):
 			file_name = tmp[1]
 		elif msg.startswith("NEXTHOST"):
 			message = "NEXTHOST"
+
+		elif msg.statswith("NEWHOST"):
+			tmp = msg.split(' ')
+			if len(tmp) < 2:
+				message="INVALID"
+			else:
+				message = "NEWHOST"
+				file_name = tmp[1]
 		else:
 			message = "INVALID"
 			file_name = ""
 		if message != "INVALID":
-			s.sendto("ACK", addr) #SEND ACK
+			s.sendto("ACK", addr) #SEND ACK if not invalid message
 
 	except socket.error:
 		print "Failed to receive message"
@@ -157,5 +165,3 @@ class netbin_udp:
 
 	def send_tcp_open_msg(self, port, addr):
 		self.s.sendto("TCPOPEN " + port, (addr, constants.LISTEN_PORT))
-
-
