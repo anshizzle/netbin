@@ -25,11 +25,11 @@ class netbin_tcp:
 		while not file_data.endswith(constants.FILE_END_SIGNAL):
 				try:
 					file_data = con.recv(constants.GEN_PACKET_LENGTH)
+					print file_data
 				except socket.error as serr:
 					printDebug("Socket Error " + str(serr.errno))
-				if file_data:
-					print file_data
-					break
+				
+					
 		
 
 		con.close()
