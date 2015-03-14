@@ -9,13 +9,13 @@ import constants
 def list(s, file_list):
 	num_files = str(len(file_list))
 	padding = '-'*(constants.LIST_INIT_PACKET_LENGTH - len(num_files))
-	conn.sendall(num_files+padding)
+	s.sendall(num_files+padding)
 
 	if len(file_list) > 0:
 		for fp in file_list:
 			fn = fp[1]
 			padding = '-' * (constants.LIST_FILE_PACKET_LENGTH - len(fn))
-			conn.sendall(fn + padding)
+			s.sendall(fn + padding)
 
 
 
@@ -26,10 +26,10 @@ def upload(s, file_list, user_input, addr):
 	
 	upload = user_input.split(' ')
 	if len(upload) < 2:
-		conn.sendall("ERROR: Filename not received.")
+		s.sendall("ERROR: Filename not received.")
 	else:
 		file_list.append([addr[0], upload[1]])
-		conn.sendall("File: " + upload[1] + " received")
+		s.sendall("File: " + upload[1] + " received")
 		print "current file list is "
 		print file_list
 
@@ -38,12 +38,12 @@ def upload(s, file_list, user_input, addr):
 def download(s, file_list, user_input):
 	download = user_input.split(' ')
 	if len(download) < 2:
-		conn.sendall("ERROR: Filename not received.")
+		s.sendall("ERROR: Filename not received.")
 	else:
 		print "Received Download Request for: " + download
 		dl_file_pair = next((file_pair for file_pair in file_list if file_pair[2] == download[1]), None)
 		if dl_file_pair == None:
-			conn.sendall("ERROR: File not found in list. Are you sure it's been uploaded?")
+			s.sendall("ERROR: File not found in list. Are you sure it's been uploaded?")
 		else:
-			conn.sendall(dl_file_pair[0])
+			s.sendall(dl_file_pair[0])
 			print "Requested file is available at " + dl_file_pair[0]
