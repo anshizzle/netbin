@@ -32,10 +32,10 @@ TODO:
 	PRIORITY
 	- LIST COMMAND
 	- RELEASE TCP PORTS
-	- SEND MESSAGE
+	- ERROR CATCHING
 	- NETBIN FILE STRUCTURE, copying files into that
-	- MAKING HOST FUNCTION LIKE A CLIENT
-	- MOVING HOST OVER
+	- SEND MESSAGE
+
 
 	def release_tcp_port(self, port):
 		self.s_comm.sendto("RELEASINGTCPPORT " + str(port), (hostAddr, constants.HOST_LISTEN_PORT))

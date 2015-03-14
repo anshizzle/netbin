@@ -14,7 +14,7 @@ class netbin_tcp:
 		self.port = port
 
 	def tcp_listener(self, comm_addr, fh,  udp_sock):
-		print "YOU ARE NOW LISTENING FOR FILE DATA ON PORT: "+ str(self.port)
+		printDebug("YOU ARE NOW LISTENING FOR FILE DATA ON PORT: "+ str(self.port), "tcp")
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		sock.bind((socket.gethostname(), self.port))
 		sock.listen(1)
@@ -27,24 +27,30 @@ class netbin_tcp:
 		file_data = ""
 
 		try:
-
-			f = open(fh, 'w')
-
+			f = open(fh, 'wb')
 		except IOError:
+			printDebug("check that file exists", "tcp")
 
-			printDebug("check that file exists", "ioe")
+		count = 0
 
 		while not file_data.endswith(constants.FILE_END_SIGNAL):
 				try:
+					count = count +1
 					file_data = con.recv(constants.GEN_PACKET_LENGTH)
 					if file_data.endswith(constants.FILE_END_SIGNAL):
-						file_data = file_data[0:len(file_data)-len(constants.FILE_END_SIGNAL)]
+						file_data = file_data.replace(constants.FILE_END_SIGNAL, "")
+						f.write(file_data)
+						break
 					f.write(file_data)
 				except socket.error as serr:
-					printDebug("Socket Error " + str(serr.errno), "tcp")			
+					printDebug("Socket Error " + str(serr.errno), "tcp")		
+
+
 		f.close()
 		con.close()
 
+		printDebug("REACHED END OF TRANSMISSON", "f")
+		printDebug("Number of transmissions: " + str(count), "f")
 
 	def tcp_send(self, fh, addr):
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -54,7 +60,7 @@ class netbin_tcp:
 		try:
 			with open(fh, 'rb') as f:
 				while True:
-					fd = f.read(1024)
+					fd = f.read(constants.GEN_PACKET_LENGTH)
 					print fd
 					try:
 						sock.sendall(fd)
@@ -64,7 +70,7 @@ class netbin_tcp:
 						break
 
 		except IOError:
-			printDebug("check that the file exists","ioe")
+			printDebug("check that the file exists","tcp")
 
 		try:
 			sock.sendall(constants.FILE_END_SIGNAL)
