@@ -30,7 +30,7 @@ def client_input(is_host, s, udp_socket):
 			print "Sending list request"
 			client_function_handler.list(s)
 		elif any(user_input.startswith(cmd) for cmd in constants.DOWNLOAD_CMDS): # DOWNLOAD
-			client_function_handler.download_file(s, user_input, udp_scoket)
+			client_function_handler.download_file(s, user_input, udp_socket)
 		else: 
 			print "Invalid command"
 
