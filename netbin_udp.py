@@ -38,16 +38,15 @@ def receive_message(s):
 		s.settimeout(None)
 		msg, addr = s.recvfrom(1024)
 		if msg.startswith("ACK"):
+			message = "REQUEST"
 			file_name = msg.split(' ')[1]
-			s.sendto("ACK", addr) #SEND ACK
-			return [file_name, addr]
 		elif msg.startswith("TCPOPEN"):
 			port = msg.split(' ')[1]
 			return port
-		elif msg.startswith("REQUEST"):
-			tmp = msg.split(' ')
-			message = "REQUEST"
-			file_name = tmp[1]
+		# elif msg.startswith("REQUEST"):
+		# 	tmp = msg.split(' ')
+		# 	message = "REQUEST"
+		# 	file_name = tmp[1]
 		elif msg.startswith("NEXTHOST"):
 			message = "NEXTHOST"
 
@@ -61,6 +60,7 @@ def receive_message(s):
 		else:
 			message = "INVALID"
 			file_name = ""
+
 		if message != "INVALID":
 			s.sendto("ACK", addr) #SEND ACK if not invalid message
 
@@ -167,3 +167,5 @@ class netbin_udp:
 
 	def send_tcp_open_msg(self, port, addr):
 		self.s.sendto("TCPOPEN " + port, (addr, constants.LISTEN_PORT))
+
+

@@ -6,7 +6,7 @@ import netbin_client
 import host_function_handler
 import constants
 from netbin_udp import *
-
+from util import *
 
 next_host = 0
 conns = []
@@ -26,7 +26,11 @@ def manage_client(s, addr):
 
 	while True:
 		print "waiting for request"
-		data = s.recv(1024)
+		try:
+			data = s.recv(1024)
+		except socket.error:
+			printDebug("Socket error!", "d")
+			break
 
 		if any(data.startswith(cmd) for cmd in constants.LIST_CMDS):
 			print "list request received"
