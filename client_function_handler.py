@@ -13,7 +13,7 @@ def upload(s, user_input):
 	else:
 		if(os.path.isfile(fileinput[1])):
 			s.sendall("upload "+fileinput[1])
-			reply = s.recv(GEN_PACKET_LENGTH)
+			reply = s.recv(constants.GEN_PACKET_LENGTH)
 			print reply
 		else:
 			print "Invalid File Found"
