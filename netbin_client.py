@@ -56,3 +56,6 @@ def start(host, port):
 			print reply
 		except socket.error:
 			printError("Failed to receive the message.")
+
+	s.close()
+	sys.exit()

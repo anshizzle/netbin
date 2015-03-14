@@ -25,7 +25,7 @@ def manage_client(s, addr):
 
 	while True:
 		print "waiting for request"
-		data = conn.recv(1024)
+		data = s.recv(1024)
 
 		if data == "list":
 			print "list request received"
@@ -36,10 +36,10 @@ def manage_client(s, addr):
 			host_function_handler.download(s, file_list, data)
 		elif data == "exit":
 			print "Closing connection with " + addr[0]
-			conn.sendall("Closing connection")
+			s.sendall("Closing connection")
 			break
 		else:
-			conn.sendall("Command unrecognized")
+			s.sendall("Command unrecognized")
 
 
 
@@ -48,7 +48,7 @@ def manage_client(s, addr):
 
 	# also need to remove conn from conns list. 
 
-	conn.close() # close connection
+	s.close() # close connection
 	sys.exit() # terminate threa
 
 

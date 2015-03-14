@@ -22,7 +22,7 @@ def list(s):
 	s.sendall("list")
 	raw = s.recv(constants.LIST_INIT_PACKET_LENGTH)
 	try:
-		num_files = int(raw.strip('-'))
+		num_files = int(raw.rstrip('-'))
 	except ValueError:
 		print raw
 		return

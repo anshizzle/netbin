@@ -4,6 +4,8 @@ import pingy
 import netbin_host
 import netbin_client
 import sys
+import netifaces
+import re
 from timeit import default_timer as timer
 
 
