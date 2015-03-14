@@ -4,6 +4,8 @@ import constants
 
 from netbin_udp import *
 import constants
+from util import *
+
 
 class netbin_tcp:
 
@@ -13,10 +15,10 @@ class netbin_tcp:
 	def tcp_listener(self, udp_sock):
 		print "YOU ARE NOW LISTENING FOR FILE DATA ON PORT: "+self.port
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		sock.bind((addr, self.port))
+		sock.bind((comm_addr[0], self.port))
 		sock.listen(1)
 
-		# tell the requesting client the connection is open
+		# tell the requesting client the connection is open and what port it's on
 		udp_sock.send_tcp_open_msg(self.port, addr)
 
 		while True:
@@ -25,6 +27,7 @@ class netbin_tcp:
 				while True:
 					file_data = con.recv(GEN_PACKETLENGTH)
 					if file_data:
+						print file_data
 						break
 			finally:
 				con.close()
@@ -33,7 +36,9 @@ class netbin_tcp:
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		sock.connect((addr, self.port))
 		try:
-			sock.sendall(fh, file_data)
+			sock.sendall(file_data)
+		except socket.error:
+			printDebug("Socket error", "tcp")
 
 		finally:
 		    print "closing socket"
