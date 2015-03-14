@@ -37,7 +37,7 @@ class netbin_udp:
 	def client_listener(self):
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		host = socket.gethostname()
-		#print "attempting to bind UDP at host " + host + " with port " + str(self.port)
+		print "attempting to bind UDP at host " + host + " with port " + str(self.port)
 		try:
 			s.bind((host, self.port))
 		except socket.error, msg:

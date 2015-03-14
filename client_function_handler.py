@@ -3,6 +3,8 @@ import constants
 import pdb
 import os
 
+from netbin_udp import *
+
 # User made an upload command
 # If length is less than 2, user did not add a file name.
 #
@@ -47,5 +49,6 @@ def download_file(s, user_input):
 		print "USAGE: download target dest"
 	else:
 		s.sendall("download " + fileinput[1])
-		reply = s.recv(constants.GEN_PACKET_LENGTH)
+		reply = s.recv(constants.GEN_PACKET_LENGTH) #ip address
+		#netbin_udp(constants.LISTEN_PORT)
 		print reply

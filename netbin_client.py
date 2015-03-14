@@ -2,6 +2,10 @@ import sys
 import socket
 import client_function_handler
 
+from udp_listener import *
+import constants
+from thread import *
+
 def printError(error):
 	print "ERROR: " + error + ' Terminating.'
 	sys.exit()
@@ -41,13 +45,16 @@ def start(host, port):
 
 	print "Connected to host"
 
+	# create a udp listener for each client
+	my_udp = netbin_udp(constants.LISTEN_PORT)
+	start_new_thread(my_udp.client_listener, ())	
+
 	msg = s.recv(4096)
 
 	if msg == "NEXTHOST":
 		next_host=1
 	else:
 		print "Welcome to netbin!"
-
 
 	client_input(False, s)
 

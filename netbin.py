@@ -1,4 +1,4 @@
-`import socket
+import socket
 from multiprocessing.pool import Pool
 import pingy
 import netbin_host
