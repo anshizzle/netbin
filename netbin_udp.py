@@ -136,7 +136,7 @@ class netbin_udp:
 			msg, data, addr = receive_host_message(self.s)
 			if msg == "ISHOST":
 				print "Received ISHOST Request from " + addr[0]
-				self.s_comm.sendto("IAMHOST", addr)
+				self.s.sendto("IAMHOST", addr)
 			elif msg == "NEEDTCPPORT":
 				self.s_comm.sendto(str(self.available_tcp_ports.pop()), addr)
 			elif msg == "RELEASINGTCPPORT":
