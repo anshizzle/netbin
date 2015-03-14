@@ -12,6 +12,8 @@ from timeit import default_timer as timer
 
 def ping(host):
 	return pingy.verbose_ping(host, .5, 1)
+	
+
 
 
 

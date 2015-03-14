@@ -15,10 +15,10 @@ def printError(error):
 	sys.exit()
 
 
-
-
-
-
+#
+# Function is given its own thread
+# Used to handle an individual client.
+#
 def manage_client(s, addr):
 	global file_list
 	s.sendall("Welcome")
@@ -45,8 +45,11 @@ def manage_client(s, addr):
 
 
 	# Also need to remove all files for conn from the file_list
+	tmp = [file_pair for file_pair in file_list if file_list[0] != addr[0]]
+	file_list = tmp
 
 	# also need to remove conn from conns list. 
+	
 
 	s.close() # close connection
 	sys.exit() # terminate threa
