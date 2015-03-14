@@ -85,7 +85,7 @@ class netbin_udp:
 		except socket.error, msg:
 			constants.printError('Could not bind passive listener to port.')
 		while 1:
-			file_name, addr = receive_message(self.s)
+			message, file_name, addr = receive_message(self.s)
 			print file_name + "\n"
 			#print addr
 			if file_name and addr:
