@@ -1,4 +1,6 @@
 import socket
+from netbin_tcp import *
+import constants
 
 def receive_message(s):
 	message = ""
@@ -8,11 +10,11 @@ def receive_message(s):
 		s.settimeout(None)
 		msg, addr = s.recvfrom(1024)
 		
-		if msg.startsWith("REQUEST"):
+		if msg.startswith("REQUEST"):
 			tmp = msg.split(' ')
 			message = "REQUEST"
 			file_name = tmp[1]
-		elif msg.startsWith("NEXTHOST"):
+		elif msg.startswith("NEXTHOST"):
 			message = "NEXTHOST"
 			file_name = ""
 
@@ -41,32 +43,44 @@ class netbin_udp:
 			printError('Could not bind passive listener to port.')
 		while 1:
 			data, file_name, addr = receive_message(self.s)
-			print data + " " + file_name + " from " + addr
+			if file_name and addr:
+				# now send file data to requesting netbin client
+				my_tcp = netbin_tcp(7901)
+				try:
+
+					with open(file_name, 'rb') as f:
+						file_data = f.read()
+
+				except IOError:
+					print "check that the file exists"
+
+				my_tcp.tcp_send(file_data, file_name, addr)
+
 
 	def send_request(self, fh, addr):
 		#send the whole command
-	    self.s.sendto(fh, addr)
+	    self.s.sendto(fh, (addr, constants.LISTEN_PORT))
 	    # Get ACK from listener
 	    package_acked = 0
 	    count = 1 #message has already been sent once
 
-	    s.settimeout(.500)
+	    self.s.settimeout(.500)
 	    while not package_acked and count < 3:
 	        print "Waiting for ACK " + msg
 	        try:
-	            d = s.recvfrom(1024)
+	            d = self.s.recvfrom(1024)
 	            reply = d[0]
 	            if reply == "ACK":
 	                package_acked = 1
 	                print "PACKAGE WAS ACKED"
 	        except socket.error:
-	            s.sendto(msg, addr)
+	            self.s.sendto(msg, (addr, constants.LISTEN_PORT))
 	            count = count + 1
 	    if count >= 3:
 	        printError("Failed to send message.")
 
-	    # NOW THAT YOU HAVE ACK'D SET UP TCP connect
-	    tcp_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+		# NOW THAT YOU HAVE ACK'D SET UP TCP connect
+		my_tcp = netbin_tcp(7901)
+		my_tcp.tcp_listener()
 
 
