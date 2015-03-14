@@ -150,15 +150,13 @@ class netbin_udp:
 
 
 	def send_request(self, fh, addr):
-		#send the whole command
-
 
 	    self.s_comm.sendto("ACK " + fh + " " + str(self.communicate_port), (addr, constants.LISTEN_PORT))
 	    # Get ACK from listener
 	    package_acked = False
 	    count = 1 #message has already been sent once
 
-	    self.s.settimeout(.500)
+	    self.s_comm.settimeout(.500)
 	    while not package_acked and count < 3:
 	        print "Waiting for ACK FOR " + fh
 	        try:
@@ -176,6 +174,7 @@ class netbin_udp:
 	    if package_acked:
 			# NOW THAT YOU HAVE ACK'D SET UP TCP connect
 			printDebug("Ack logged", "udp")
+
 			port = self.get_next_free_port()
 			printDebug("Free TCP Port is " + str(port), "udp");
 			my_tcp = netbin_tcp(port)
