@@ -5,7 +5,7 @@ import constants
 
 def receive_host_message(s):
 	message=""
-	file_name=""
+	data=""
 	addr = ""
 	try: 
 		s.settimeout(None)
@@ -16,7 +16,14 @@ def receive_host_message(s):
 		elif msg.startswith("NEEDTCPPORT"):
 			message = "NEEDTCPPORT"
 		elif msg.startswith("RELEASINGTCPPORT"):
-			message = msg
+			tmp = msg.split(' ')
+			if len(tmp) < 2:
+				message="INVALID"
+			else:				
+				message = "RELEASINGTCPPORT"
+				data = tmp[1]
+
+
 		else:
 			message ="INVALID"
 
@@ -24,7 +31,7 @@ def receive_host_message(s):
 		print "Failed to receive message"
 
 
-	return [message,addr]
+	return [message,data,addr]
 
 
 def receive_message(s):
@@ -63,6 +70,7 @@ class netbin_udp:
 		self.port = port
 		self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		self.host = socket.gethostname()
+		self.available_tcp_ports = range(constants.LISTEN_PORT+1, constants.LISTEN_PORT+11).reverse()
 
 
 	def listener(self):
@@ -93,10 +101,18 @@ class netbin_udp:
 		except socket.error, msg:
 			printError('Could not bind passive listener to port.')
 		while 1:
-			msg, file_name, addr = receive_host_message(self.s)
+			msg, data, addr = receive_host_message(self.s)
 			if msg == "ISHOST":
-				print "Yeah"
-
+				self.s.sendto("IAMHOST", addr)
+			elif msg == "NEEDTCPPORT":
+				self.s.sendto(str(self.available_tcp_ports.pop()), addr)
+			elif msg == "RELEASINGTCPPORT":
+				try:
+					released_port = int(data)
+					self.available_tcp_ports.insert(0, released_port)
+					self.s.sendto("RELEASESUCCESSFUL", addr)
+				except ValueError:
+					self.s.sendto("INVALIDPORT", addr)
 
 
 	def send_request(self, fh, addr):

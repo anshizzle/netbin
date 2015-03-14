@@ -10,7 +10,6 @@ import constants
 next_host = 0
 conns = []
 file_list = [] # Each file is stored as triple with [Addr, FileName]
-available_tcp_ports = range(constants.LISTEN_PORT+1, constants.LISTEN_PORT+11)
 host_udp =netbin_udp(constants.LISTEN_PORT)
 
 
