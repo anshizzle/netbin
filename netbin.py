@@ -27,7 +27,8 @@ if(enArray):
 		if (2 in bcTuple):
 			print bcTuple[2]
 			if ('broadcast' in bcTuple[2][0]):
-				subnet = re.match("^\d+.\d+.[^.]", bcTuple[2][0]['broadcast']).group(0)
+				subnet = re.match("^\d+.\d+.[^.]", bcTuple[2][0]['broadcast']).group(0)+'.'
+
 				break
 
 if(subnet == ""):

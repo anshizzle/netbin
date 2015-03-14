@@ -40,14 +40,12 @@ def clientthread(conn):
 			print "list request received"
 			send_file_list(conn)
 		elif data.startswith("upload"):
-			upload = data.split(' ')
-			if len(upload) < 2:
-				conn.sendall("ERROR: Filename not received.")
-			else:
-				file_list.append([conn, upload[1]])
-				conn.sendall("File: " + upload[1] + " received")
-				print "current file list is "
-				print file_list
+			#wait for client to send file data
+			file_handle = data.split(' ')[1]
+			file_list.append([conn, file_handle])
+			conn.sendall("File: " + file_handle + " received")
+			print "current file list is "
+			print file_list
 		elif data == "exit":
 			conn.sendall("Closing connection")
 			break
