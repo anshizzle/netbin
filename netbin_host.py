@@ -10,7 +10,6 @@ conns = []
 file_list = [] # Each file is stored as triple with [Addr, FileName]
 s = socket.socket()
 
-
 def printError(error):
 	print "ERROR: " + error + ' Terminating.\n'
 	sys.exit()
@@ -97,11 +96,9 @@ def inputthread(socket):
 def exit():
 	#PICK A CONNECTION TO BE THE NEXT HOST.
 	#Send it the info
-
 	[conn.close() for conn in conns]
 	socket.close()
 	os._exit(1)
-
 
 def start(port):
 	host = socket.gethostname()
