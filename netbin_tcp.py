@@ -27,7 +27,7 @@ class netbin_tcp:
 					file_data = con.recv(constants.GEN_PACKET_LENGTH)
 					print file_data
 				except socket.error as serr:
-					printDebug("Socket Error " + str(serr.errno))
+					printDebug("Socket Error " + str(serr.errno), "tcp")
 				
 					
 		
@@ -42,18 +42,26 @@ class netbin_tcp:
 		sock.connect_ex((addr, self.port))
 		try:
 			with open(fh, 'rb') as f:
-				fd = f.read()
-				print fd
+				while True:
+					fd = f.read(1024)
+					print fd
+					try:
+						sock.sendall(fd)
+					except socket.error:
+						printDebug("socket error", "tcp")
+					if not fd:
+						)
+						break
 
 		except IOError:
 			print "check that the file exists"
 
-
-		try:
-			sock.sendall(fd + constants.FILE_END_SIGNAL)
+		try
+			sock.sendall(constants.FILE_END_SIGNAL)
 		except socket.error:
 			printDebug("Socket error", "tcp")
+		
 
 		finally:
-		    print "closing socket"
+		    printDebug( "closing TCP socket", "tcp")
 		    sock.close()
