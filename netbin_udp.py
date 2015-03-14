@@ -45,10 +45,6 @@ def receive_message(s, s_comm):
 			message = "REQUEST"
 			tmp = msg.split(' ')
 			file_name = tmp[1]
-			try:	
-				port = int(tmp[2])
-			except ValueError:
-				port = constants.COMMUNICATE_PORT
 		# elif msg.startswith("REQUEST"):
 		# 	tmp = msg.split(' ')
 		# 	message = "REQUEST"
@@ -68,12 +64,12 @@ def receive_message(s, s_comm):
 			file_name = ""
 
 		if message != "INVALID":
-			s_comm.sendto("ACK", (addr[0], port ))#SEND ACK if not invalid message
+			s_comm.sendto("ACK", addr) #SEND ACK if not invalid message
 
 	except socket.error:
 		print "Failed to receive message"
 
-	return [message, file_name, addr, port]
+	return [message, file_name, addr]
 
 
 class netbin_udp:
@@ -84,7 +80,7 @@ class netbin_udp:
 		self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		self.s_comm = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		self.host = socket.gethostname()
-		self.available_tcp_ports = range(constants.LISTEN_PORT+1, constants.LISTEN_PORT+11).reverse()
+		self.available_tcp_ports = range(constants.LISTEN_PORT+1, constants.LISTEN_PORT+11)
 
 
 	def listener(self):
@@ -95,10 +91,10 @@ class netbin_udp:
 		except socket.error, msg:
 			constants.printError('Could not bind passive listener to port.')
 		while 1:
-			message, file_name, addr, port = receive_message(self.s, self.s_comm)
+			message, file_name, addr = receive_message(self.s, self.s_comm)
 			print file_name + "\n"
 			#print addr
-			if file_name and addr:
+			if message == "REQUEST":
 				
 				# need to know that the listening tcp connection is open
 				# tcp_port = self.receive_message(self, self.s)
@@ -127,7 +123,9 @@ class netbin_udp:
 
 
 	def host_listener(self):
-		print "attempting to bind UDP at host " + self.host + " with port " + str(self.receive_port)
+		self.available_tcp_ports.reverse()
+		# printDebug(str(self.available_tcp_ports), "udp")
+		print "binding UDP at host " + self.host + " with port " + str(self.receive_port)
 		try:
 			self.s.bind((self.host, self.receive_port))
 			self.s_comm.bind((self.host, self.communicate_port))
@@ -138,16 +136,16 @@ class netbin_udp:
 			msg, data, addr = receive_host_message(self.s)
 			if msg == "ISHOST":
 				print "Received ISHOST Request from " + addr[0]
-				self.s.sendto("IAMHOST", addr)
+				self.s_comm.sendto("IAMHOST", addr)
 			elif msg == "NEEDTCPPORT":
-				self.s.sendto(str(self.available_tcp_ports.pop()), addr)
+				self.s_comm.sendto(str(self.available_tcp_ports.pop()), addr)
 			elif msg == "RELEASINGTCPPORT":
 				try:
 					released_port = int(data)
 					self.available_tcp_ports.insert(0, released_port)
-					self.s.sendto("RELEASESUCCESSFUL", addr)
+					self.s_comm.sendto("RELEASESUCCESSFUL", addr)
 				except ValueError:
-					self.s.sendto("INVALIDPORT", addr)
+					self.s_comm.sendto("INVALIDPORT", addr)
 
 
 	def send_request(self, fh, addr):
@@ -163,8 +161,8 @@ class netbin_udp:
 	    while not package_acked and count < 3:
 	        print "Waiting for ACK FOR " + fh
 	        try:
-	            d, comm_addr = self.s_comm.recvfrom(1024)
-	            reply = d[0]
+	            reply, comm_addr = self.s_comm.recvfrom(1024)
+	            
 	            if reply == "ACK":
 	                package_acked = 1
 	                print fh + " ACK'D"
@@ -184,7 +182,7 @@ class netbin_udp:
 
 
 	def get_next_free_port(self):
-		self.s_comm.sendto("NEEDTCPPORT", (hostAddr, constants.HOST_LISTEN_PORT))
+		self.s_comm.sendto("NEEDTCPPORT", (self.hostAddr, constants.HOST_LISTEN_PORT))
 		port_str = self.s_comm.recv(1024)
 		try: 
 			port = int(port_str)

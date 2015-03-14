@@ -8,7 +8,7 @@ import re
 import constants
 from timeit import default_timer as timer
 from thread import *
-
+from util import *
 
 
 def send_is_host_query(subnet, sock, m_range):
@@ -16,7 +16,7 @@ def send_is_host_query(subnet, sock, m_range):
 		try:
 			sock.sendto("ISHOST", (subnet+str(i), constants.HOST_LISTEN_PORT))
 		except socket.error as serr:
-			print "Socket Error No " + str(serr.errno) +":" + subnet+str(i) 
+			printDebug("Socket Error No " + str(serr.errno) +":" + subnet+str(i), "i")
 
 
 	
