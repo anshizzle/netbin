@@ -6,7 +6,7 @@ from thread import *
 
 next_host = 0
 conns = []
-file_list = []
+file_list = [] # Each file is stored as triple with [SOCKET_OBJ, Addr, FileName]
 
 
 
@@ -27,7 +27,7 @@ def send_file_list(conn):
 
 
 
-def clientthread(conn):
+def clientthread(conn, addr):
 	if next_host != 0:
 		conn.sendall("NEXTHOST")
 	else:
@@ -46,7 +46,26 @@ def clientthread(conn):
 			conn.sendall("File: " + file_handle + " received")
 			print "current file list is "
 			print file_list
+			upload = data.split(' ')
+			if len(upload) < 2:
+				conn.sendall("ERROR: Filename not received.")
+			else:
+				file_list.append([conn, addr, upload[1]])
+				conn.sendall("File: " + upload[1] + " received")
+				print "current file list is "
+				print file_list
+		elif data.startswith("download"):
+			download = data.split(' ')
+			if len(download) < 2:
+				conn.sendall("ERROR: Filename not received.")
+			else:
+				dl_file_pair = next((file_pair for file_pair in file_list if file_pair[2] == download[1]), None)
+				if dl_file_pair == None:
+					conn.sendall("ERROR: File not found in list. Are you sure it's been uploaded?")
+				else:
+					conn.sendall(dl_file_pair[1][0])
 		elif data == "exit":
+			print "Closing connection with " + conn.gethostname()
 			conn.sendall("Closing connection")
 			break
 		else:
@@ -93,7 +112,7 @@ def start(port):
 		conns.append(conn)
 
 		#start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
-		start_new_thread(clientthread ,(conn,))
+		start_new_thread(clientthread ,(conn, addr, ))
 
 		
 
