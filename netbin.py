@@ -16,7 +16,27 @@ start = timer()
 pool = Pool(75)
 lNodes = {}
 pAddress = []
-subnet = "192.168.1."
+
+##FIND THE SUBNET MASK
+subnet = ""
+enArray = [ x for x in netifaces.interfaces() if x.startswith('en') ]
+if(enArray):
+	for en in enArray:
+		print netifaces.ifaddresses(en).keys()
+		bcTuple = netifaces.ifaddresses(en)
+		if (2 in bcTuple):
+			print bcTuple[2]
+			if ('broadcast' in bcTuple[2][0]):
+				subnet = re.match("^\d+.\d+.[^.]", bcTuple[2][0]['broadcast']).group(0)+'.'
+				break
+
+## IF NO SUBNET FOUND, TERMINATE
+
+if(subnet == ""):
+	print("NO SUBNET FOUND!")
+	sys.exit()
+
+
 pAddress.extend(range(1, 255))
 pAddress = [subnet + str(address) for address in pAddress]
 
