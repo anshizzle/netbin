@@ -4,11 +4,14 @@ import socket
 from thread import *
 import netbin_client
 import host_function_handler
+import constants
 
 
 next_host = 0
 conns = []
 file_list = [] # Each file is stored as triple with [Addr, FileName]
+available_tcp_ports = range(constants.LISTEN_PORT+1, constants.LISTEN_PORT+11)
+
 
 def printError(error):
 	print "ERROR: " + error + ' Terminating.\n'
@@ -90,6 +93,8 @@ def start(port):
 	start_new_thread(inputthread, (s, ))
 
 
+	host_udp = netbin_udp(constants.LISTEN_PORT)
+	
 
 	while 1:
 

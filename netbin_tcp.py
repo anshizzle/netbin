@@ -1,5 +1,6 @@
 import sys
 import socket
+import constants
 
 class netbin_tcp:
 

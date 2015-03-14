@@ -2,6 +2,8 @@ import socket
 from netbin_tcp import *
 import constants
 
+
+
 def receive_message(s):
 	message = ""
 	file_name = ""
@@ -16,24 +18,29 @@ def receive_message(s):
 			file_name = tmp[1]
 		elif msg.startswith("NEXTHOST"):
 			message = "NEXTHOST"
-			file_name = ""
-
 		else:
 			message = "INVALID"
 			file_name = ""
 		
-		s.sendto("ACK", addr) #SEND ACK
+		if message != "INVALID":
+			s.sendto("ACK", addr) #SEND ACK
+
 
 	except socket.error:
 		print "Failed to receive message"
 
 	return [message, file_name, addr]
 
+
+
+
+
 class netbin_udp:
 	def __init__(self, port):
 		self.port = port
 		self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		self.host = socket.gethostname()
+
 
 	def listener(self):
 		print "attempting to bind UDP at host " + self.host + " with port " + str(self.port)
@@ -59,6 +66,8 @@ class netbin_udp:
 
 	def send_request(self, fh, addr):
 		#send the whole command
+		print "sending file request to " + addr
+
 	    self.s.sendto(fh, (addr, constants.LISTEN_PORT))
 	    # Get ACK from listener
 	    package_acked = 0
@@ -84,3 +93,7 @@ class netbin_udp:
 		my_tcp.tcp_listener()
 
 
+	            s.sendto(msg, (addr, constants.LISTEN_PORT))
+	            count = count + 1
+	    if count >= 3:
+	        print "Could not locate file holder. Please try again in a little bit."
