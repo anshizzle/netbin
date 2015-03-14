@@ -65,7 +65,7 @@ def receive_message(s, s_comm):
 			file_name = ""
 
 		if message != "INVALID":
-			s_comm.sendto("ACK", (addr[0], ) #SEND ACK if not invalid message
+			s_comm.sendto("ACK", (addr[0], port ))#SEND ACK if not invalid message
 
 	except socket.error:
 		print "Failed to receive message"
@@ -92,7 +92,6 @@ class netbin_udp:
 		except socket.error, msg:
 			constants.printError('Could not bind passive listener to port.')
 		while 1:
-<<<<<<< HEAD
 			message, file_name, addr, port = receive_message(self.s, self.s_comm)
 			print file_name + "\n"
 			#print addr
@@ -102,24 +101,6 @@ class netbin_udp:
 				# tcp_port = self.receive_message(self, self.s)
 				tcp_port_msg = self.s_comm.recvfrom(1024)
 				tcp_port = int(tcp_port_message.split(' ')[1])
-=======
-			message, file_name, addr = self.receive_message(self.s)
-			print file_name + "\n"
-			#print addr
-			if file_name and addr:
-				while 1:
-					# need to know that the listening tcp connection is open
-					tcp_port = self.receive_message(self.s)
-					if(tcp_port):
-						# now send file data to requesting netbin client
-						my_tcp = netbin_tcp(tcp_port)
-						while 1:
-							try:
-								with open(file_name, 'rb') as f:
-									file_data = f.read()
-									print file_data
-									break
->>>>>>> deb24f4c71fc751772665422b15e69709948e23b
 
 				if(tcp_port):
 					# now send file data to requesting netbin client
