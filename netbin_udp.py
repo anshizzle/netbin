@@ -85,7 +85,7 @@ class netbin_udp:
 
 
 	def listener(self):
-		print "attempting to bind UDP at host " + self.host + " with port " + str(self.port)
+		printDebug("attempting to bind UDP Listeners, both listener and communicator", "udp")
 		try:
 			self.s.bind((self.host, self.receive_port))
 			self.s_comm.bind((self.host, self.communicate_port))
