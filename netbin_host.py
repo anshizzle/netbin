@@ -15,20 +15,12 @@ def printError(error):
 	print "ERROR: " + error + ' Terminating.\n'
 	sys.exit()
 
-def send_file_list(conn):
-
-	conn.sendall(str(len(file_list)))
-	
-	if len(file_list) > 0:
-		files = [file_pair[2] for file_pair in file_list]
-		response = str(files).strip('[]')
-		conn.sendall(response)
 
 
 
 
 
-def clientthread(conn, addr):
+def manage_client(conn, addr):
 	conn.sendall("Welcome")
 
 	while True:

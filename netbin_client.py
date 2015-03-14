@@ -12,19 +12,6 @@ def printError(error):
 	print "ERROR: " + error + ' Terminating.'
 	sys.exit()
 
-def receive_file_list(s):
-	raw = s.recv(4096)
-	try:
-		num_files = int(raw)
-	except ValueError:
-		num_files = 0
-	if num_files == 0:
-		print "No files currently on the network\n"
-	else:
-		print "There are " + str(num_files) + " on the network\n"
-		file_list = s.recv(4096)
-		print file_list
-
 def download_file(s):
 	raw = s.recv(4096)
 	print raw
@@ -42,7 +29,7 @@ def client_input(is_host, s):
 		if user_input.startswith("upload"):
 			client_function_handlers.upload(s, user_input)
 		elif user_input == "list":
-			client_function_handlers.upload(s)
+			client_function_handlers.list(s, file_list)
 		elif user_input.startswith("download"):
 			client_function_handler.download_file(s, user_input)
 
