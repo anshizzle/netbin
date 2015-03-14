@@ -9,7 +9,6 @@ import host_function_handler
 next_host = 0
 conns = []
 file_list = [] # Each file is stored as triple with [Addr, FileName]
-s = socket.socket()
 
 def printError(error):
 	print "ERROR: " + error + ' Terminating.\n'
@@ -20,9 +19,9 @@ def printError(error):
 
 
 
-def manage_client(conn, addr):
+def manage_client(s, addr):
 	global file_list
-	conn.sendall("Welcome")
+	s.sendall("Welcome")
 
 	while True:
 		print "waiting for request"
@@ -74,6 +73,7 @@ def exit(s):
 	os._exit(1)
 
 def start(port):
+	s = socket.socket()
 	host = socket.gethostname()
 	# Bind socket to port
 	try:

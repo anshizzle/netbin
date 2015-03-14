@@ -14,7 +14,6 @@ ssdpRequest = "M-SEARCH * HTTP/1.1\r\n" + \
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.sendto(ssdpRequest, (SSDP_ADDR, SSDP_PORT))
-print "request made\n"
 print sock.recv(1000)
 
 
