@@ -4,16 +4,14 @@ LIST_FILE_PACKET_LENGTH = 1024
 GEN_PACKET_LENGTH = 4096
 
 HOST_PORT = 7878
-<<<<<<< HEAD
 
-LISTEN_PORT = 7900
 
 DOWNLOAD_CMDS = ["download", "dl"]
 LIST_CMDS = ["list", "ls"]
 UPLOAD_CMDS = ["upload", "up"]
 EXIT_CMDS = ["exit", "quit", "q"]
-=======
+
 LISTEN_PORT = 7900
 
 NUM_INIT_THREADS = 10
->>>>>>> a5c2d508f09da22179bacd9fa87a1e3cfc4ffb26
+
