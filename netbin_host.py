@@ -21,6 +21,7 @@ def printError(error):
 
 
 def manage_client(conn, addr):
+	global file_list
 	conn.sendall("Welcome")
 
 	while True:

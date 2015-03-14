@@ -25,6 +25,7 @@ def list(s):
 		num_files = int(raw.strip('-'))
 	except ValueError:
 		print raw
+		return
 
 	if num_files == 0:
 		print "No files currently on the network\n"

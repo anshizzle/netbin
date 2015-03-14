@@ -32,7 +32,7 @@ def client_input(is_host, s):
 		if user_input.startswith("upload"):
 			client_function_handler.upload(s, user_input)
 		elif user_input == "list":
-			client_function_handler.list(s, file_list)
+			client_function_handler.list(s)
 		elif user_input.startswith("download"):
 			client_function_handler.download_file(s, user_input)
 
