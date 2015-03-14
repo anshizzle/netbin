@@ -62,6 +62,7 @@ while 1:
 			hostAddr = ""
 	except socket.error:
 		hostAddr = ""
+		break
 
 sock.close()
 
