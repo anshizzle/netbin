@@ -27,11 +27,15 @@ def upload(s, file_list, user_input, addr):
 		s.sendall("ERROR: Filename not received.")
 	else:
 		# TODO: check if there is already a file with that name in the list.
+		m_file = next((file_pair for file_pair in file_list if file_pair[1] == upload[1]), None)
 
-		file_list.append([addr[0], upload[1]])
-		s.sendall(upload[1] + " uploaded!")
-		print "current file list is "
-		print file_list
+		if m_file is not None:
+			s.sendall("There is already a file with that name hosted. Please try a different file name")
+		else:
+			file_list.append([addr[0], upload[1]])
+			s.sendall(upload[1] + " uploaded!")
+			print "current file list is "
+			print file_list
 
 	return file_list
 
