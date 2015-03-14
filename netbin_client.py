@@ -2,7 +2,7 @@ import sys
 import socket
 import client_function_handler
 
-from udp_listener import *
+from netbin_udp import *
 import constants
 from thread import *
 
@@ -47,7 +47,7 @@ def start(host, port):
 
 	# create a udp listener for each client
 	my_udp = netbin_udp(constants.LISTEN_PORT)
-	start_new_thread(my_udp.client_listener, ())	
+	start_new_thread(my_udp.listener, ())
 
 	msg = s.recv(4096)
 

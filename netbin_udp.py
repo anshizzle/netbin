@@ -20,28 +20,47 @@ def receive_message(s):
 			message = "INVALID"
 			file_name = ""
 		
-		s.sendto("ACK", addr)
+		s.sendto("ACK", addr) #SEND ACK
 
 	except socket.error:
 		print "Failed to receive message"
 
-	return [message, file_name,addr]
-
-
+	return [message, file_name, addr]
 
 class netbin_udp:
-	###udp netbin###
 	def __init__(self, port):
 		self.port = port
+		self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		self.host = socket.gethostname()
 
-	def client_listener(self):
-		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-		host = socket.gethostname()
-		print "attempting to bind UDP at host " + host + " with port " + str(self.port)
+	def listener(self):
+		print "attempting to bind UDP at host " + self.host + " with port " + str(self.port)
 		try:
-			s.bind((host, self.port))
+			self.s.bind((self.host, self.port))
 		except socket.error, msg:
 			printError('Could not bind passive listener to port.')
 		while 1:
-			data, file_name, addr = receive_message(s)
+			data, file_name, addr = receive_message(self.s)
 			print data + " " + file_name + " from " + addr
+
+	def send_request(self, fh, addr):
+		#send the whole command
+	    self.s.sendto(fh, addr)
+	    # Get ACK from listener
+	    package_acked = 0
+	    count = 1 #message has already been sent once
+
+	    s.settimeout(.500)
+	    while not package_acked and count < 3:
+	        print "Waiting for ACK " + msg
+	        try:
+	            d = s.recvfrom(1024)
+	            reply = d[0]
+	            if reply == "ACK":
+	                package_acked = 1
+	                print "PACKAGE WAS ACKED"
+	        except socket.error:
+	            s.sendto(msg, addr)
+	            count = count + 1
+	    if count >= 3:
+	        printError("Failed to send message.")
