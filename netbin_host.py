@@ -62,7 +62,6 @@ def manage_client(s, addr):
 	conns = tmp
 
 	
-
 	s.close() # close connection
 	sys.exit() # terminate threa
 
@@ -77,6 +76,16 @@ def inputthread(s):
 			exit(s)
 
 			
+def upload(s, user_input):
+	global file_list
+	file_input = user_input.split(' ')
+	if len(file_input) < 2:
+		print "USAGE: upload filename"
+	else:
+		if os.path.isfile(file_input[1]):
+			file_list = host_function_handler.upload(s,file_list, data, addr)
+		else:
+			print consants.INVALID_FILE_UPLOAD
 
 # Need to handle all clean up.
 def exit(s):
@@ -87,11 +96,11 @@ def exit(s):
 		#Send it the info
 		[conn[0].close() for conn in conns]
 
-
-
-
 	s.close()
 	os._exit(1)
+
+
+
 
 def start(port):
 	global host_udp
@@ -101,13 +110,13 @@ def start(port):
 	try:
 	    s.bind((host, port))
 	except socket.error, msg:
-		printError('Could not bind port.')
+		printError('Could not bind port. Please restart netbin')
 
 	s.listen(5)
 	print 'Now listening '
 
+	# start_new_thread(netbin_client.client_input, (True, s, host_udp))
 	start_new_thread(inputthread, (s, ))
-
 	start_new_thread(host_udp.listener, ())
 
 	while 1:

@@ -16,10 +16,7 @@ def send_is_host_query(subnet, sock, m_range):
 	for i in m_range:
 		sock.sendto("ISHOST", (subnet+str(i), constants.LISTEN_PORT))	
 	
-
-
-
-
+	
 start = timer()
 lNodes = {}
 pAddress = []

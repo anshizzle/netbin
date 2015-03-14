@@ -154,7 +154,7 @@ class netbin_udp:
 				print "am i getting a socket error"
 				self.s.sendto(fh, (addr, constants.LISTEN_PORT))
 				count = count + 1
-	    
+    
 	    if(package_acked):
 			# NOW THAT YOU HAVE ACK'D SET UP TCP connect
 			my_tcp = netbin_tcp(7902)

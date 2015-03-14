@@ -11,3 +11,10 @@ One thing I realized we need to do -
 			- Client connects, runs netbin_client
 				- lets host know that it exists and is running. if it terminates, then the host
 
+
+
+Transferring host reponsibilities
+
+Receiving Host responsibilities
+
+Having host operate as client.

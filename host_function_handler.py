@@ -29,7 +29,7 @@ def upload(s, file_list, user_input, addr):
 		# TODO: check if there is already a file with that name in the list.
 		m_file = next((file_pair for file_pair in file_list if file_pair[1] == upload[1]), None)
 
-		if m_file is not None:
+		if m_file is not None and s is not None:
 			s.sendall("There is already a file with that name hosted. Please try a different file name")
 		else:
 			file_list.append([addr[0], upload[1]])

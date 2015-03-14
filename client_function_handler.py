@@ -17,11 +17,11 @@ def upload(s, user_input):
 			reply = s.recv(constants.GEN_PACKET_LENGTH)
 			print reply
 		else:
-			print "Invalid File Found"
+			print constants.INVALID_FILE_UPLOAD
 
 def list(s):
 	s.sendall("list")
-	raw = s.recv(constants.LIST_INIT_PACKET_LENGTH)
+	raw = s.recv(coelsenstants.LIST_INIT_PACKET_LENGTH)
 	try:
 		num_files = int(raw.rstrip('-'))
 	except ValueError:
