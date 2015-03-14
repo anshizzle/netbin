@@ -103,7 +103,8 @@ def start(host, port):
 	while 1:
 		print ">"
 		user_input = raw_input()
-
+		if user_input == "exit":
+				break
 		# before sending make sure they are sending legit files before sending
 		if user_input.startswith("upload"):
 			fileinput = user_input.split(' ')
@@ -131,8 +132,7 @@ def start(host, port):
 				print reply
 			except socket.error:
 				printError("Failed to receive the message.")
-			if user_input == "exit":
-				break
+
 			
 
 	s.close()
