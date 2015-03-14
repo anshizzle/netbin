@@ -14,10 +14,6 @@ import math
 
 PACKET_LENGTH  = 100.
 
-def printError(error):
-	print "ERROR: " + error + ' Terminating.'
-	sys.exit()
-
 
 def is_number(s):
     try:
@@ -51,11 +47,11 @@ def send_message(msg, addr):
                 count = count + 1
 
         if count >= 3:
-            printError("Failed to send message.")
+            contants.printError("Failed to send message.")
 
 
     except socket.error, msg:
-        printError("Failed to send message.")
+        constants.printError("Failed to send message.")
         sys.exit() 
 
 def receive_message():
@@ -65,13 +61,13 @@ def receive_message():
         try:
             length = int(length[1:])
         except ValueError:
-            printError("Invalid packet from server.")
+            contants.printError("Invalid packet from server.")
 
         s.sendto("ACK", addr)
         
 
     except socket.error:
-        printError("Failed to receive message.")
+        contants.printError("Failed to receive message.")
 
     count = 0
     counter = 0
@@ -95,7 +91,7 @@ def receive_message():
                 s.sendto("ACK", (host, port))
                 # print "PACKAGE ACKED"
         except socket.error:
-            printError("Failed to receive message.")
+            contants.printError("Failed to receive message.")
 
     return [message, addr]
 
@@ -103,11 +99,11 @@ def receive_message():
 
 #Check the number of arguments
 if len(sys.argv) != 3:
-	printError("Invalid number of args.")
+	contants.printError("Invalid number of args.")
 
 # Check if port is valid.
 if not is_number(sys.argv[2]) or 1 > int(sys.argv[2]) or int(sys.argv[2]) > 65535:
-	printError("Invalid port.")
+	contants.printError("Invalid port.")
 
 
 host = sys.argv[1]

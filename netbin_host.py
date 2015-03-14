@@ -14,9 +14,6 @@ file_list = [] # Each file is stored as triple with [Addr, FileName]
 host_udp = netbin_udp(constants.LISTEN_PORT)
 
 
-def printError(error):
-	print "ERROR: " + error + ' Terminating.\n'
-	sys.exit()
 
 
 #
@@ -105,7 +102,7 @@ def start(port):
 	try:
 	    s.bind((host, port))
 	except socket.error, msg:
-		printError('Could not bind port. Please restart netbin')
+		constants.printError('Could not bind port. Please restart netbin')
 
 	s.listen(5)
 	print 'Now listening '

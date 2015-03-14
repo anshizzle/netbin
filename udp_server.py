@@ -19,10 +19,6 @@ import math
 PACKET_LENGTH = 100.
 
 
-def printError(error):
-    print "ERROR: " + error + ' Terminating.\n'
-    sys.exit()
-
 def is_number(s):
     try:
         int(s)

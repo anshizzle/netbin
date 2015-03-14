@@ -1,4 +1,4 @@
-
+import sys
 LIST_INIT_PACKET_LENGTH = 64
 LIST_FILE_PACKET_LENGTH = 1024
 GEN_PACKET_LENGTH = 4096
@@ -14,3 +14,9 @@ LISTEN_PORT = 7900
 
 
 INVALID_FILE_UPLOAD = "File not found"
+
+
+
+def printError(error):
+	print "ERROR: " + error + ' Terminating.\n'
+	sys.exit()

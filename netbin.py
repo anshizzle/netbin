@@ -54,7 +54,7 @@ for li in address_groups:
 sock.settimeout(1)
 while 1:
 	try:
-		result, addr = sock.recv(1024)
+		result, addr = sock.recvfrom(1024)
 		if result == "IAMHOST":
 			hostAddr = addr[0]
 			break

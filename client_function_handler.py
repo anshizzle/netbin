@@ -21,7 +21,7 @@ def upload(s, user_input):
 
 def list(s):
 	s.sendall("list")
-	raw = s.recv(coelsenstants.LIST_INIT_PACKET_LENGTH)
+	raw = s.recv(constants.LIST_INIT_PACKET_LENGTH)
 	try:
 		num_files = int(raw.rstrip('-'))
 	except ValueError:

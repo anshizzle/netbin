@@ -7,9 +7,6 @@ import constants
 from thread import *
 
 
-def printError(error):
-	print "ERROR: " + error + ' Terminating.'
-	sys.exit()
 
 def download_file(s):
 	raw = s.recv(4096)
@@ -45,7 +42,7 @@ def start(host, port):
 	result = s.connect_ex((host, port))
 
 	if result > 0: 
-		printError("Could not connect to server.")
+		constants.printError("Could not connect to server.")
 
 	print "Connected to host"
 

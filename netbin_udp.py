@@ -83,7 +83,7 @@ class netbin_udp:
 		try:
 			self.s.bind((self.host, self.port))
 		except socket.error, msg:
-			printError('Could not bind passive listener to port.')
+			constants.printError('Could not bind passive listener to port.')
 		while 1:
 			file_name, addr = receive_message(self.s)
 			print file_name + "\n"
@@ -116,7 +116,7 @@ class netbin_udp:
 		try:
 			self.s.bind((self.host, self.port))
 		except socket.error, msg:
-			printError('Could not bind passive listener to port.')
+			constants.printError('Could not bind passive listener to port.')
 		while 1:
 			msg, data, addr = receive_host_message(self.s)
 			if msg == "ISHOST":
