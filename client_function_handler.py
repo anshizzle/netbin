@@ -45,4 +45,4 @@ def download_file(s, user_input, my_udp):
 	else:
 		s.sendall("download " + fileinput[1])
 		reply = s.recv(constants.GEN_PACKET_LENGTH) #ip address
-		my_udp.send_request(fileinput[1], reply)
+		my_udp.send_request(fileinput[1], fileinput[2], reply)

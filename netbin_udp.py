@@ -149,7 +149,7 @@ class netbin_udp:
 					self.s_comm.sendto("INVALIDPORT", addr)
 
 
-	def send_request(self, fh, addr):
+	def send_request(self, fh, fd, addr):
 
 	    self.s_comm.sendto("ACK " + fh + " " + str(self.communicate_port), (addr, constants.LISTEN_PORT))
 	    # Get ACK from listener
@@ -178,7 +178,7 @@ class netbin_udp:
 			port = self.get_next_free_port()
 			printDebug("Free TCP Port is " + str(port), "udp");
 			my_tcp = netbin_tcp(port)
-			my_tcp.tcp_listener(comm_addr,  self)
+			my_tcp.tcp_listener(comm_addr, fd, self)
 	    else:
 	        print "Could not locate file holder. Please try again in a little bit."
 

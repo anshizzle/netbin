@@ -66,7 +66,7 @@ class netbin_tcp:
 		except IOError:
 			printDebug("check that the file exists","ioe")
 
-		try
+		try:
 			sock.sendall(constants.FILE_END_SIGNAL)
 		except socket.error:
 			printDebug("Socket error", "tcp")
