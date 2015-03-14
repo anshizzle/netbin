@@ -8,17 +8,19 @@ import netifaces
 import re
 import constants
 from timeit import default_timer as timer
+from thread import *
 
 
-def ping(host):
-	return pingy.verbose_ping(host, .5, 1)
+
+def send_is_host_query(subnet, sock, m_range):
+	for i in m_range:
+		sock.sendto("ISHOST", (subnet+str(i), constants.LISTEN_PORT))	
 	
 
 
 
 
 start = timer()
-pool = Pool(75)
 lNodes = {}
 pAddress = []
 
@@ -43,41 +45,20 @@ if(subnet == ""):
 
 
 pAddress.extend(range(1, 255))
-pAddress = [subnet + str(address) for address in pAddress]
+chunk_size = len(pAddress)/15
+address_groups = [pAddress[i:i+chunk_size] for i in range(0, len(pAddress), chunk_size)]
+# pAddress = [subnet + str(address) for address in pAddress]
 
-results = pool.map(ping, pAddress)
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-print [result for result in results if result[0] > 0]
-hostAddr = ""
-for ip in results:
-	if ip[0] > 0:
-		print "IP:", ip[0], "Delay:", ip[1], "ms"
-		 ##if you take out this check will take 150 seconds to run!!!!
-		try:
-			sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			sock.settimeout(0.5)
-			result = sock.connect_ex((ip[0], constants.HOST_PORT))
-			if result == 0:
-				## port open! host found
-				hostAddr = ip[0]
-				# print "Port {}: \t Open".format(port)
-			sock.close()
+for li in address_groups:
+	start_new_thread(send_is_host_query, (subnet, sock, li, ))
 
-		except KeyboardInterrupt:
-		    print "You pressed Ctrl+C"
-		    sys.exit()
-
-		except socket.gaierror:
-		    print 'Hostname could not be resolved. Exiting'
-		    sys.exit()
-
-		except socket.error:
-		    print "Couldn't connect to server"
-		    sys.exit()
-
-
-
-
+sock.settimeout(1)
+try:
+	hostAddr = sock.recv(1024)
+except socket.error:
+	hostAddr = ""
 
 
 if hostAddr: 

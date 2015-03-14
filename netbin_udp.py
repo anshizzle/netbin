@@ -48,12 +48,20 @@ def receive_message(s):
 			file_name = tmp[1]
 		elif msg.startswith("NEXTHOST"):
 			message = "NEXTHOST"
+
+		elif msg.statswith("NEWHOST"):
+			tmp = msg.split(' ')
+			if len(tmp) < 2:
+				message="INVALID"
+			else:
+				message = "NEWHOST"
+				file_name = tmp[1]
 		else:
 			message = "INVALID"
 			file_name = ""
 		
 		if message != "INVALID":
-			s.sendto("ACK", addr) #SEND ACK
+			s.sendto("ACK", addr) #SEND ACK if not invalid message
 
 
 	except socket.error:
@@ -119,32 +127,32 @@ class netbin_udp:
 		#send the whole command
 		print "sending file request to " + addr
 
-	    self.s.sendto(fh, (addr, constants.LISTEN_PORT))
-	    # Get ACK from listener
-	    package_acked = 0
-	    count = 1 #message has already been sent once
+		self.s.sendto(fh, (addr, constants.LISTEN_PORT))
+		# Get ACK from listener
+		package_acked = 0
+		count = 1 #message has already been sent once
 
-	    self.s.settimeout(.500)
-	    while not package_acked and count < 3:
-	        print "Waiting for ACK FOR " + fh
-	        try:
-	            d = self.s.recvfrom(1024)
-	            reply = d[0]
-	            if reply == "ACK":
-	                package_acked = 1
-	                print "PACKAGE WAS ACKED"
-	        except socket.error:
-	            self.s.sendto(fh, (addr, constants.LISTEN_PORT))
-	            count = count + 1
-	    if count >= 3:
-	        printError("Failed to send message.")
+		self.s.settimeout(.500)
+		while not package_acked and count < 3:
+			print "Waiting for ACK FOR " + fh
+			try:
+				d = self.s.recvfrom(1024)
+				reply = d[0]
+				if reply == "ACK":
+					package_acked = 1
+					print "PACKAGE WAS ACKED"
+			except socket.error:
+				self.s.sendto(fh, (addr, constants.LISTEN_PORT))
+				count = count + 1
+		if count >= 3:
+			printError("Failed to send message.")
 
 		# NOW THAT YOU HAVE ACK'D SET UP TCP connect
 		my_tcp = netbin_tcp(7901)
 		my_tcp.tcp_listener()
 
 
-	            s.sendto(msg, (addr, constants.LISTEN_PORT))
-	            count = count + 1
-	    if count >= 3:
-	        print "Could not locate file holder. Please try again in a little bit."
+		s.sendto(msg, (addr, constants.LISTEN_PORT))
+		count = count + 1
+		if count >= 3:
+			print "Could not locate file holder. Please try again in a little bit."

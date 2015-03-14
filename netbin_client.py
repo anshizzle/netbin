@@ -6,6 +6,7 @@ from netbin_udp import *
 import constants
 from thread import *
 
+
 def printError(error):
 	print "ERROR: " + error + ' Terminating.'
 	sys.exit()
@@ -36,6 +37,8 @@ def client_input(is_host, s, udp_socket):
 			print "Invalid command"
 
 
+
+
 def start(host, port):
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	result = s.connect_ex((host, port))
@@ -51,10 +54,7 @@ def start(host, port):
 
 	msg = s.recv(4096)
 
-	if msg == "NEXTHOST":
-		next_host=1
-	else:
-		print "Welcome to netbin!"
+	print "Welcome to netbin!"
 
 	client_input(False, s, my_udp)
 

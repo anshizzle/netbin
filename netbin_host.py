@@ -5,12 +5,12 @@ from thread import *
 import netbin_client
 import host_function_handler
 import constants
-
+from netbin_udp import *
 
 next_host = 0
 conns = []
 file_list = [] # Each file is stored as triple with [Addr, FileName]
-host_udp =netbin_udp(constants.LISTEN_PORT)
+host_udp = netbin_udp(constants.LISTEN_PORT)
 
 
 def printError(error):
@@ -52,6 +52,9 @@ def manage_client(s, addr):
 	file_list = tmp
 
 	# also need to remove conn from conns list. 
+	tmp = [conn_pair for conn_pair in conns if conns[0] != addr]
+	conns = tmp
+
 	
 
 	s.close() # close connection
@@ -71,9 +74,16 @@ def inputthread(s):
 
 # Need to handle all clean up.
 def exit(s):
-	#PICK A CONNECTION TO BE THE NEXT HOST and send it all relevant info
-	#Send it the info
-	[conn.close() for conn in conns]
+
+	if len(conns) > 0:
+		#PICK A CONNECTION TO BE THE NEXT HOST and send it all relevant info
+
+		#Send it the info
+		[conn[0].close() for conn in conns]
+
+
+
+
 	s.close()
 	os._exit(1)
 
@@ -99,7 +109,7 @@ def start(port):
 		#Accept the connection
 		conn, addr = s.accept()
 		print 'Connected with ' + addr[0] + ':' + str(addr[1])
-		conns.append(conn)
+		conns.append([conn,addr])
 
 		#start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
 		start_new_thread(manage_client ,(conn, addr, ))
