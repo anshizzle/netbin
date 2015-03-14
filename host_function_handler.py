@@ -20,16 +20,14 @@ def list(s, file_list):
 
 
 def upload(s, file_list, user_input, addr):
-	file_handle = user_input.split(' ')[1]
-
-	# need to check if file is already there.
-	
 	upload = user_input.split(' ')
+	# need to check if file is already there.
+
 	if len(upload) < 2:
 		s.sendall("ERROR: Filename not received.")
 	else:
 		file_list.append([addr[0], upload[1]])
-		s.sendall("File: " + upload[1] + " received")
+		s.sendall(upload[1] + " uploaded!")
 		print "current file list is "
 		print file_list
 
@@ -41,7 +39,7 @@ def download(s, file_list, user_input):
 		s.sendall("ERROR: Filename not received.")
 	else:
 		print "Received Download Request for: " + user_input
-		dl_file_pair = next((file_pair for file_pair in file_list if file_pair[2] == download[1]), None)
+		dl_file_pair = next((file_pair for file_pair in file_list if file_pair[1] == download[1]), None)
 		if dl_file_pair == None:
 			s.sendall("ERROR: File not found in list. Are you sure it's been uploaded?")
 		else:
