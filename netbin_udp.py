@@ -98,24 +98,24 @@ class netbin_udp:
 				
 				# need to know that the listening tcp connection is open
 				# tcp_port = self.receive_message(self, self.s)
-				tcp_port_msg = self.s_comm.recvfrom(1024)
-				tcp_port = int(tcp_port_msg.split(' ')[1])
+				tcp_port_msg, addr = self.s_comm.recvfrom(1024)
+				printDebug("TCP Port Message is: " + tcp_port_msg, 'd')
+				tcp_port = 0
+				if tcp_port_msg.startswith("TCPOPEN"):
+					tmp = tcp_port_msg.split(' ')
+					if len(tmp) >= 2:
+						try:
+							tcp_port = int(tcp_port_msg.split(' ')[1])
+						except ValueError:
+							tcp_port = 0
+							printDebug("TCP Port Message Error - message is: " + tcp_port_msg, 'udp')
 
-				if(tcp_port):
+
+
+				if tcp_port > 0:
 					# now send file data to requesting netbin client
 					my_tcp = netbin_tcp(tcp_port)
-					while 1:
-						try:
-							with open(file_name, 'rb') as f:
-								file_data = f.read()
-								print file_data
-								break
-
-						except IOError:
-							print "check that the file exists"
-
-					if(file_data): 
-						my_tcp.tcp_send(file_data, file_name, addr[0])
+					my_tcp.tcp_send(file_data, file_name, addr[0])
 
 
 				else:

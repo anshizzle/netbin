@@ -32,9 +32,11 @@ class netbin_tcp:
 			finally:
 				con.close()
 
-	def tcp_send(self, file_data, fh, addr):
+	def tcp_send(self, fh, addr):
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		sock.connect((addr, self.port))
+
+
+		sock.connect_ex((addr, self.port))
 		try:
 			sock.sendall(file_data)
 		except socket.error:
