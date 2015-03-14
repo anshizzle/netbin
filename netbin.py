@@ -1,4 +1,4 @@
-import socket
+`import socket
 from multiprocessing.pool import Pool
 import pingy
 import netbin_host
@@ -6,6 +6,7 @@ import netbin_client
 import sys
 import netifaces
 import re
+import constants
 from timeit import default_timer as timer
 
 
@@ -53,7 +54,7 @@ for ip in results:
 		try:
 			sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			sock.settimeout(0.5)
-			result = sock.connect_ex((ip[0], 7878)) ##7878 random port number
+			result = sock.connect_ex((ip[0], constants.HOST_PORT))
 			if result == 0:
 				## port open! host found
 				hostAddr = ip[0]
@@ -81,10 +82,10 @@ if hostAddr:
 	## empty strings falsify
 	## another node is already host
 	print "host found! at:", hostAddr
-	netbin_client.start(hostAddr, 7878)
+	netbin_client.start(hostAddr, constants.HOST_PORT)
 
 else:
-	netbin_host.start(7878)
+	netbin_host.start(constants.HOST_PORT)
 
 
 
