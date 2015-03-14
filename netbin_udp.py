@@ -45,7 +45,10 @@ def receive_message(s, s_comm):
 			message = "REQUEST"
 			tmp = msg.split(' ')
 			file_name = tmp[1]
-			port = tmp[2]
+			try:	
+				port = int(tmp[2])
+			except ValueError:
+				port = constants.COMMUNICATE_PORT
 		# elif msg.startswith("REQUEST"):
 		# 	tmp = msg.split(' ')
 		# 	message = "REQUEST"
@@ -151,7 +154,7 @@ class netbin_udp:
 		#send the whole command
 
 
-	    self.s_comm.sendto("ACK " + fh + " " + self.port2, (addr, constants.LISTEN_PORT))
+	    self.s_comm.sendto("ACK " + fh + " " + str(self.communicate_port), (addr, constants.LISTEN_PORT))
 	    # Get ACK from listener
 	    package_acked = 0
 	    count = 1 #message has already been sent once
