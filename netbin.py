@@ -18,6 +18,7 @@ def send_is_host_query(subnet, sock, m_range):
 		except socket.error as serr:
 			print "Socket Error No " + str(serr.errno) +":" + subnet+str(i) 
 
+
 	
 	
 start = timer()
