@@ -4,4 +4,10 @@ LIST_FILE_PACKET_LENGTH = 1024
 GEN_PACKET_LENGTH = 4096
 
 HOST_PORT = 7878
+
 LISTEN_PORT = 7900
+
+DOWNLOAD_CMDS = ["download", "dl"]
+LIST_CMDS = ["list", "ls"]
+UPLOAD_CMDS = ["upload", "up"]
+EXIT_CMDS = ["exit", "quit", "q"]

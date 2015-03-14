@@ -16,22 +16,20 @@ def download_file(s):
 
 def client_input(is_host, s, udp_socket):
 	while 1:
-
 		user_input = raw_input("> ")
-		if user_input == "exit":
+		if any(user_input == cmd for cmd in constants.UPLOAD_CMDS):
 			if is_host:
 				netbin_host.exit()
 			else:
 				break
 		# before sending make sure they are sending legit files before sending
-		if user_input.startswith("upload"):
+		elif any(user_input.startswith(cmd) for cmd in constants.UPLOAD_CMDS):
 			client_function_handler.upload(s, user_input)
-		elif user_input == "list":
+		elif any(user_input.startswith(cmd) for cmd in constants.LIST_CMDS):
 			print "Sending list request"
 			client_function_handler.list(s)
-		elif user_input.startswith("download"):
-			client_function_handler.download_file(s, user_input, udp_socket)
-
+		elif any(user_input.startswith(cmd) for cmd in constants.DOWNLOAD_CMDS):
+			client_function_handler.download_file(s, user_input, udp_scoket)
 		else: 
 			print "Invalid command"
 
