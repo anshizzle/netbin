@@ -52,10 +52,16 @@ for li in address_groups:
 	start_new_thread(send_is_host_query, (subnet, sock, li, ))
 
 sock.settimeout(1)
-try:
-	hostAddr = sock.recv(1024)
-except socket.error:
-	hostAddr = ""
+while 1:
+	try:
+		result, addr = sock.recv(1024)
+		if result == "IAMHOST":
+			hostAddr = addr[0]
+			break
+		else:
+			hostAddr = ""
+	except socket.error:
+		hostAddr = ""
 
 sock.close()
 

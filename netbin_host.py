@@ -112,7 +112,7 @@ def start(port):
 
 	# start_new_thread(netbin_client.client_input, (True, s, host_udp))
 	start_new_thread(inputthread, (s, ))
-	start_new_thread(host_udp.listener, ())
+	start_new_thread(host_udp.host_listener, ())
 
 	while 1:
 
