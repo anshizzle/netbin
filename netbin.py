@@ -57,6 +57,8 @@ try:
 except socket.error:
 	hostAddr = ""
 
+sock.close()
+
 
 if hostAddr: 
 	## empty strings falsify

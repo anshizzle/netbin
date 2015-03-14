@@ -5,13 +5,8 @@ from thread import *
 import netbin_client
 import host_function_handler
 import constants
-<<<<<<< HEAD
-
 from netbin_udp import *
 
-=======
-from netbin_udp import *
->>>>>>> a5c2d508f09da22179bacd9fa87a1e3cfc4ffb26
 
 next_host = 0
 conns = []

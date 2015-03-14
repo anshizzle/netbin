@@ -158,7 +158,7 @@ class netbin_udp:
 	    if(package_acked):
 			# NOW THAT YOU HAVE ACK'D SET UP TCP connect
 			my_tcp = netbin_tcp(7902)
-			my_tcp.tcp_listener()
+			my_tcp.tcp_listener(self.s)
 	    else:
 	        print "Could not locate file holder. Please try again in a little bit."
 
