@@ -9,7 +9,6 @@ import client_function_handler
 next_host = 0
 LISTEN_PORT = 7900
 
-prompt = "netbin:001:0"
 
 def printError(error):
 	print "ERROR: " + error + ' Terminating.'
@@ -22,7 +21,7 @@ def download_file(s):
 def client_input(is_host, s):
 	while 1:
 
-		user_input = raw_input(prompt)
+		user_input = raw_input("> ")
 		if user_input == "exit":
 			if is_host:
 				netbin_host.exit()
