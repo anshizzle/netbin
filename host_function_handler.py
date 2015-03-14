@@ -40,7 +40,7 @@ def download(s, file_list, user_input):
 	if len(download) < 2:
 		s.sendall("ERROR: Filename not received.")
 	else:
-		print "Received Download Request for: " + download
+		print "Received Download Request for: " + user_input
 		dl_file_pair = next((file_pair for file_pair in file_list if file_pair[2] == download[1]), None)
 		if dl_file_pair == None:
 			s.sendall("ERROR: File not found in list. Are you sure it's been uploaded?")
