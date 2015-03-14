@@ -64,3 +64,9 @@ class netbin_udp:
 	            count = count + 1
 	    if count >= 3:
 	        printError("Failed to send message.")
+
+	    # NOW THAT YOU HAVE ACK'D SET UP TCP connect
+	    tcp_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+
+
