@@ -14,7 +14,7 @@ def download_file(s):
 	raw = s.recv(4096)
 	print raw
 
-def client_input(is_host, s):
+def client_input(is_host, s, udp_socket):
 	while 1:
 
 		user_input = raw_input("> ")
@@ -30,7 +30,7 @@ def client_input(is_host, s):
 			print "Sending list request"
 			client_function_handler.list(s)
 		elif user_input.startswith("download"):
-			client_function_handler.download_file(s, user_input)
+			client_function_handler.download_file(s, user_input, udp_socket)
 
 		else: 
 			print "Invalid command"
@@ -56,7 +56,7 @@ def start(host, port):
 	else:
 		print "Welcome to netbin!"
 
-	client_input(False, s)
+	client_input(False, s, my_udp)
 
 	s.close()
 	sys.exit()

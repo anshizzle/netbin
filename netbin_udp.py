@@ -3,6 +3,29 @@ from netbin_tcp import *
 import constants
 
 
+def receive_host_message(s):
+	message=""
+	file_name=""
+	addr = ""
+	try: 
+		s.settimeout(None)
+		msg, addr = s.recvfrom(1024)
+
+		if msg.startswith("ISHOST"):
+			message = "ISHOST"
+		elif msg.startswith("NEEDTCPPORT"):
+			message = "NEEDTCPPORT"
+		elif msg.startswith("RELEASINGTCPPORT"):
+			message = msg
+		else:
+			message ="INVALID"
+
+	except socket.error:
+		print "Failed to receive message"
+
+
+	return [message,addr]
+
 
 def receive_message(s):
 	message = ""
@@ -62,6 +85,18 @@ class netbin_udp:
 					print "check that the file exists"
 
 				my_tcp.tcp_send(file_data, file_name, addr)
+
+	def host_listener(self):
+		print "attempting to bind UDP at host " + self.host + " with port " + str(self.port)
+		try:
+			self.s.bind((self.host, self.port))
+		except socket.error, msg:
+			printError('Could not bind passive listener to port.')
+		while 1:
+			msg, file_name, addr = receive_host_message(self.s)
+			if msg == "ISHOST":
+
+
 
 
 	def send_request(self, fh, addr):

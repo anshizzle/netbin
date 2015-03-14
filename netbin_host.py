@@ -11,6 +11,7 @@ next_host = 0
 conns = []
 file_list = [] # Each file is stored as triple with [Addr, FileName]
 available_tcp_ports = range(constants.LISTEN_PORT+1, constants.LISTEN_PORT+11)
+host_udp =netbin_udp(constants.LISTEN_PORT)
 
 
 def printError(error):
@@ -64,7 +65,6 @@ def inputthread(s):
 		user_input = raw_input()
 
 		if user_input == "exit":
-
 			print "exit received"
 			exit(s)
 
@@ -72,13 +72,14 @@ def inputthread(s):
 
 # Need to handle all clean up.
 def exit(s):
-	#PICK A CONNECTION TO BE THE NEXT HOST.
+	#PICK A CONNECTION TO BE THE NEXT HOST and send it all relevant info
 	#Send it the info
 	[conn.close() for conn in conns]
 	s.close()
 	os._exit(1)
 
 def start(port):
+	global host_udp
 	s = socket.socket()
 	host = socket.gethostname()
 	# Bind socket to port
@@ -92,9 +93,7 @@ def start(port):
 
 	start_new_thread(inputthread, (s, ))
 
-
-	host_udp = netbin_udp(constants.LISTEN_PORT)
-	
+	start_new_thread(host_udp.listener, ())
 
 	while 1:
 

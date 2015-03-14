@@ -37,7 +37,7 @@ def list(s):
 			file_name = s.recv(constants.LIST_FILE_PACKET_LENGTH)
 			print file_name.strip('-')
 
-def download_file(s, user_input):
+def download_file(s, user_input, my_udp):
 	fileinput = user_input.split(' ')
 
 	if len(fileinput) < 3:
@@ -45,5 +45,4 @@ def download_file(s, user_input):
 	else:
 		s.sendall("download " + fileinput[1])
 		reply = s.recv(constants.GEN_PACKET_LENGTH) #ip address
-		my_udp = netbin_udp(constants.LISTEN_PORT)
 		my_udp.send_request(fileinput[1], reply)
