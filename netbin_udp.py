@@ -151,7 +151,7 @@ class netbin_udp:
 		#send the whole command
 
 
-	    self.s_comm.sendto("ACK " + fh, (addr, constants.LISTEN_PORT))
+	    self.s_comm.sendto("ACK " + fh + " " + self.port2, (addr, constants.LISTEN_PORT))
 	    # Get ACK from listener
 	    package_acked = 0
 	    count = 1 #message has already been sent once

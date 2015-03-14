@@ -22,10 +22,10 @@ host_udp = netbin_udp(constants.HOST_LISTEN_PORT, constants.HOST_COMMUNICATE_POR
 #
 def manage_client(s, addr):
 	global file_list
+	global conns
 	s.sendall("Welcome")
 
 	while True:
-		print "waiting for request"
 		try:
 			data = s.recv(1024)
 		except socket.error:
