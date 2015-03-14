@@ -138,6 +138,7 @@ class netbin_udp:
 				print "Received ISHOST Request from " + addr[0]
 				self.s.sendto("IAMHOST", addr)
 			elif msg == "NEEDTCPPORT":
+				printDebug("Received request for TCP Port from " + addr[0], "udp")
 				self.s_comm.sendto(str(self.available_tcp_ports.pop()), addr)
 			elif msg == "RELEASINGTCPPORT":
 				try:
@@ -154,7 +155,7 @@ class netbin_udp:
 
 	    self.s_comm.sendto("ACK " + fh + " " + str(self.communicate_port), (addr, constants.LISTEN_PORT))
 	    # Get ACK from listener
-	    package_acked = 0
+	    package_acked = False
 	    count = 1 #message has already been sent once
 
 	    self.s.settimeout(.500)
@@ -164,7 +165,7 @@ class netbin_udp:
 	            reply, comm_addr = self.s_comm.recvfrom(1024)
 	            
 	            if reply == "ACK":
-	                package_acked = 1
+	                package_acked = True
 	                print fh + " ACK'D"
 	                break
 	        except socket.error:
@@ -172,11 +173,13 @@ class netbin_udp:
 				self.s_comm.sendto(fh, (addr, constants.LISTEN_PORT))
 				count = count + 1
     
-	    if(package_acked):
+	    if package_acked:
 			# NOW THAT YOU HAVE ACK'D SET UP TCP connect
+			printDebug("Ack logged", "udp")
 			port = self.get_next_free_port()
-			my_tcp = netbin_tcp(comm_addr, port)
-			my_tcp.tcp_listener(self.s_comm)
+			printDebug("Free TCP Port is " + str(port), "udp");
+			my_tcp = netbin_tcp(port)
+			my_tcp.tcp_listener(comm_addr,  self)
 	    else:
 	        print "Could not locate file holder. Please try again in a little bit."
 

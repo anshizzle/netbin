@@ -18,3 +18,10 @@ Transferring host reponsibilities
 Receiving Host responsibilities
 
 Having host operate as client.
+
+
+TODO:
+	- SEND MESSAGE METHOD
+	- HOST OPERATING AS CLIENT
+	- TRANSFER HOST RESPONSIBILITIES
+	- MAKING FILES (IF TIME)
