@@ -11,7 +11,7 @@ class netbin_tcp:
 		self.port = port
 
 	def tcp_listener(self, udp_sock):
-		print "YOU ARE NOW LISTENING FOR FILE DATA ON PORT: "+self.port
+		printDebug("YOU ARE NOW LISTENING FOR FILE DATA ON PORT: "+ str(self.port), "tcp")
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		sock.bind((addr, self.port))
 		sock.listen(1)

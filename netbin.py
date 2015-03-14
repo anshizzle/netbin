@@ -15,7 +15,7 @@ def send_is_host_query(subnet, sock, m_range):
 	for i in m_range:
 		try:
 			sock.sendto("ISHOST", (subnet+str(i), constants.HOST_LISTEN_PORT))
-		except socket_error as serr:
+		except socket.error as serr:
 			print "Socket Error No " + serr.errno +":" + subnet+str(i) 
 	
 	
