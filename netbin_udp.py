@@ -87,13 +87,13 @@ class netbin_udp:
 		except socket.error, msg:
 			constants.printError('Could not bind passive listener to port.')
 		while 1:
-			message, file_name, addr = self.receive_message(self, self.s)
+			message, file_name, addr = self.receive_message(self.s)
 			print file_name + "\n"
 			#print addr
 			if file_name and addr:
 				while 1:
 					# need to know that the listening tcp connection is open
-					tcp_port = self.receive_message(self, self.s)
+					tcp_port = self.receive_message(self.s)
 					if(tcp_port):
 						# now send file data to requesting netbin client
 						my_tcp = netbin_tcp(tcp_port)
