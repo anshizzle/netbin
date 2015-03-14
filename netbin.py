@@ -7,6 +7,13 @@ import netifaces
 import re
 from timeit import default_timer as timer
 
+import netbin_host
+import netbin_client
+
+
+import client_function_handler
+import host_function_handler
+
 def ping(host):
 	return pingy.verbose_ping(host, .5, 1)
 
@@ -19,9 +26,6 @@ pAddress = []
 subnet = ""
 prompt = ""
 
-
-import netbin_host
-import netbin_client
 
 ##FIND THE SUBNET MASK
 enArray = [ x for x in netifaces.interfaces() if x.startswith('en') ]

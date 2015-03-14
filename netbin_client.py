@@ -5,6 +5,7 @@ from thread import *
 import pdb
 import netbin_host
 from netbin_udp import netbin_udp
+import client_function_handler
 next_host = 0
 LISTEN_PORT = 7900
 
@@ -29,9 +30,9 @@ def client_input(is_host, s):
 				break
 		# before sending make sure they are sending legit files before sending
 		if user_input.startswith("upload"):
-			client_function_handlers.upload(s, user_input)
+			client_function_handler.upload(s, user_input)
 		elif user_input == "list":
-			client_function_handlers.list(s, file_list)
+			client_function_handler.list(s, file_list)
 		elif user_input.startswith("download"):
 			client_function_handler.download_file(s, user_input)
 

@@ -3,6 +3,7 @@ import os
 import socket
 from thread import *
 import netbin_client
+import host_function_handler
 
 
 next_host = 0
@@ -28,34 +29,13 @@ def manage_client(conn, addr):
 
 		if data == "list":
 			print "list request received"
-			send_file_list(conn)
+			host_function_handler.list(s, file_list)
 		elif data.startswith("upload"):
-			#wait for client to send file data
-			file_handle = data.split(' ')[1]
-			file_list.append([conn, file_handle])
-			conn.sendall("File: " + file_handle + " received")
-			print "current file list is "
-			print file_list
-			upload = data.split(' ')
-			if len(upload) < 2:
-				conn.sendall("ERROR: Filename not received.")
-			else:
-				file_list.append([conn, addr, upload[1]])
-				conn.sendall("File: " + upload[1] + " received")
-				print "current file list is "
-				print file_list
+			file_list = host_function_handler.upload(s, file_list, data, addr)
 		elif data.startswith("download"):
-			download = data.split(' ')
-			if len(download) < 2:
-				conn.sendall("ERROR: Filename not received.")
-			else:
-				dl_file_pair = next((file_pair for file_pair in file_list if file_pair[2] == download[1]), None)
-				if dl_file_pair == None:
-					conn.sendall("ERROR: File not found in list. Are you sure it's been uploaded?")
-				else:
-					conn.sendall(dl_file_pair[1][0])
+			host_function_handler.download(s, file_list, data)
 		elif data == "exit":
-			print "Closing connection with " + conn.gethostname()
+			print "Closing connection with " + addr[0]
 			conn.sendall("Closing connection")
 			break
 		else:
@@ -72,7 +52,7 @@ def manage_client(conn, addr):
 	sys.exit() # terminate threa
 
 
-def inputthread(socket):
+def inputthread(s):
 	print "Input thread running"
 	while True:
 		user_input = raw_input()
@@ -80,16 +60,16 @@ def inputthread(socket):
 		if user_input == "exit":
 
 			print "exit received"
-			exit()
+			exit(s)
 
 			
 
 # Need to handle all clean up.
-def exit():
+def exit(s):
 	#PICK A CONNECTION TO BE THE NEXT HOST.
 	#Send it the info
 	[conn.close() for conn in conns]
-	socket.close()
+	s.close()
 	os._exit(1)
 
 def start(port):

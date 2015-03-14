@@ -13,17 +13,37 @@ def list(s, file_list):
 
 	if len(file_list) > 0:
 		for fp in file_list:
+			fn = fp[1]
+			padding = '-' * (LIST_FILE_PACKET_LENGTH - len(fn))
+			conn.sendall(fn + padding)
 
 
 
+def upload(s, file_list, user_input, addr):
+	file_handle = user_input.split(' ')[1]
 
-
-
-def send_file_list(conn):
-
-	conn.sendall(str(len(file_list)))
+	# need to check if file is already there.
 	
-	if len(file_list) > 0:
-		files = [file_pair[2] for file_pair in file_list]
-		response = str(files).strip('[]')
-		conn.sendall(response)
+	upload = user_input.split(' ')
+	if len(upload) < 2:
+		conn.sendall("ERROR: Filename not received.")
+	else:
+		file_list.append([addr[0], upload[1]])
+		conn.sendall("File: " + upload[1] + " received")
+		print "current file list is "
+		print file_list
+
+	return file_list
+
+def download(s, file_list, user_input):
+	download = user_input.split(' ')
+	if len(download) < 2:
+		conn.sendall("ERROR: Filename not received.")
+	else:
+		print "Received Download Request for: " + download
+		dl_file_pair = next((file_pair for file_pair in file_list if file_pair[2] == download[1]), None)
+		if dl_file_pair == None:
+			conn.sendall("ERROR: File not found in list. Are you sure it's been uploaded?")
+		else:
+			conn.sendall(dl_file_pair[0])
+			print "Requested file is available at " + dl_file_pair[0]
