@@ -15,7 +15,7 @@ LIST_CMDS = ["list", "ls"]
 UPLOAD_CMDS = ["upload", "up"]
 EXIT_CMDS = ["exit", "quit", "q"]
 
-FILE_END_SIGNAL = "ABCEOF12039!!^^"
+FILE_END_SIGNAL = "EOFAFD12039!!^^"
 
 INVALID_FILE_UPLOAD = "File not found"
 

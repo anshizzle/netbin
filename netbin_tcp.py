@@ -21,10 +21,10 @@ class netbin_tcp:
 		# tell the requesting client the connection is open and what port it's on
 		udp_sock.send_tcp_open_msg(self.port, comm_addr)		
 		con, file_owner_addr = sock.accept()
-		
-		while True:
+		file_data = ""
+		while not file_data.endswith(constants.FILE_END_SIGNAL):
 				try:
-					file_data = con.recv(GEN_PACKETLENGTH)
+					file_data = con.recv(constants.GEN_PACKET_LENGTH)
 				except socket.error as serr:
 					printDebug("Socket Error " + str(serr.errno))
 				if file_data:

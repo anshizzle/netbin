@@ -115,7 +115,7 @@ class netbin_udp:
 				if tcp_port > 0:
 					# now send file data to requesting netbin client
 					my_tcp = netbin_tcp(tcp_port)
-					my_tcp.tcp_send(file_data, file_name, addr[0])
+					my_tcp.tcp_send(file_name, addr[0])
 
 
 				else:
