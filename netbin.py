@@ -62,6 +62,7 @@ while 1:
 		print result
 		print str(addr)
 		if result == "IAMHOST":
+			sock.sendto("ACK", addr)
 			hostAddr = addr[0]
 			break
 		else:

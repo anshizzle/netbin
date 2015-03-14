@@ -28,14 +28,14 @@ def manage_client(s, addr):
 		print "waiting for request"
 		data = s.recv(1024)
 
-		if any(user_input.startswith(cmd) for cmd in constants.LIST_CMDS):
+		if any(data.startswith(cmd) for cmd in constants.LIST_CMDS):
 			print "list request received"
 			host_function_handler.list(s, file_list)
-		elif any(user_input.startswith(cmd) for cmd in constants.UPLOAD_CMDS):
+		elif any(data.startswith(cmd) for cmd in constants.UPLOAD_CMDS):
 			file_list = host_function_handler.upload(s, file_list, data, addr)
-		elif any(user_input.startswith(cmd) for cmd in constants.DOWNLOAD_CMDS):
+		elif any(data.startswith(cmd) for cmd in constants.DOWNLOAD_CMDS):
 			host_function_handler.download(s, file_list, data)
-		elif any(user_input == cmd for cmd in constants.EXIT_CMDS):
+		elif any(data == cmd for cmd in constants.EXIT_CMDS):
 			print "Closing connection with " + addr[0]
 			s.sendall("Closing connection")
 			break

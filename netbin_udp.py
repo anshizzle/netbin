@@ -51,7 +51,7 @@ def receive_message(s):
 		elif msg.startswith("NEXTHOST"):
 			message = "NEXTHOST"
 
-		elif msg.statswith("NEWHOST"):
+		elif msg.startswith("NEWHOST"):
 			tmp = msg.split(' ')
 			if len(tmp) < 2:
 				message="INVALID"
