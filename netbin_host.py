@@ -115,7 +115,7 @@ def start(port):
 		conns.append(conn)
 
 		#start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
-		start_new_thread(clientthread ,(conn, addr, ))
+		start_new_thread(manage_client ,(conn, addr, ))
 
 		
 
