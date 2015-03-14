@@ -47,7 +47,7 @@ def start(host, port):
 	print "Connected to host"
 
 	# create a udp listener for each client
-	my_udp = netbin_udp(constants.LISTEN_PORT)
+	my_udp = netbin_udp(constants.LISTEN_PORT, constants.COMMUNICATE_PORT, host)
 	start_new_thread(my_udp.listener, ())
 
 	msg = s.recv(4096)

@@ -15,8 +15,9 @@ def send_is_host_query(subnet, sock, m_range):
 	for i in m_range:
 		try:
 			sock.sendto("ISHOST", (subnet+str(i), constants.HOST_LISTEN_PORT))
-		except socket_error as serr:
-			print "Socket Error No " + serr.errno +":" + subnet+str(i) 
+		except socket.error as serr:
+			print "Socket Error No " + str(serr.errno) +":" + subnet+str(i) 
+
 	
 	
 start = timer()
@@ -37,7 +38,6 @@ if(enArray):
 				break
 
 ## IF NO SUBNET FOUND, TERMINATE
-
 if(subnet == ""):
 	print("NO SUBNET FOUND!")
 	sys.exit()
@@ -46,8 +46,6 @@ if(subnet == ""):
 pAddress.extend(range(1, 255))
 chunk_size = len(pAddress)/16
 address_groups = [pAddress[i:i+chunk_size] for i in range(0, len(pAddress), chunk_size)]
-print str(address_groups)
-# pAddress = [subnet + str(address) for address in pAddress]
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 

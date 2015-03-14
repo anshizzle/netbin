@@ -14,7 +14,7 @@ def list(s, file_list):
 	if len(file_list) > 0:
 		for fp in file_list:
 			fn = fp[1]
-			padding = '-' * (constants.LIST_FILE_PACKET_LENGTH/4 - len(fn))
+			padding = '-' * (constants.LIST_FILE_PACKET_LENGTH - len(fn))
 			s.sendall(fn + padding)
 
 

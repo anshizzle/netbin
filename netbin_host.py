@@ -11,7 +11,7 @@ from util import *
 next_host = 0
 conns = []
 file_list = [] # Each file is stored as triple with [Addr, FileName]
-host_udp = netbin_udp(constants.HOST_LISTEN_PORT)
+host_udp = netbin_udp(constants.HOST_LISTEN_PORT, constants.HOST_COMMUNICATE_PORT)
 
 
 
