@@ -95,7 +95,7 @@ class netbin_udp:
 		while 1:
 			msg, file_name, addr = receive_host_message(self.s)
 			if msg == "ISHOST":
-
+				print "Yeah"
 
 
 
