@@ -17,6 +17,8 @@ pool = Pool(75)
 lNodes = {}
 pAddress = []
 subnet = ""
+prompt = ""
+
 
 import netbin_host
 import netbin_client
@@ -35,6 +37,7 @@ if(enArray):
 				break
 
 ## IF NO SUBNET FOUND, TERMINATE
+
 if(subnet == ""):
 	print("NO SUBNET FOUND!")
 	sys.exit()
@@ -47,7 +50,7 @@ pAddress = [subnet + str(address) for address in pAddress]
 PORT = 7878
 
 results = pool.map(ping, pAddress)
-
+pool.terminate()
 print [result for result in results if result[0] > 0]
 
 hostAddr = ""

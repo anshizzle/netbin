@@ -8,6 +8,8 @@ from netbin_udp import netbin_udp
 next_host = 0
 LISTEN_PORT = 7900
 
+prompt = "netbin:001:0"
+
 def printError(error):
 	print "ERROR: " + error + ' Terminating.'
 	sys.exit()
@@ -18,8 +20,8 @@ def download_file(s):
 
 def client_input(is_host, s):
 	while 1:
-		print ">"
-		user_input = raw_input()
+
+		user_input = raw_input(prompt)
 		if user_input == "exit":
 			if is_host:
 				netbin_host.exit()
