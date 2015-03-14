@@ -2,11 +2,12 @@ import sys
 import os
 import socket
 from thread import *
+import netbin_client
 
 
 next_host = 0
 conns = []
-file_list = [] # Each file is stored as triple with [SOCKET_OBJ, Addr, FileName]
+file_list = [] # Each file is stored as triple with [Addr, FileName]
 
 
 
@@ -19,7 +20,7 @@ def send_file_list(conn):
 	conn.sendall(str(len(file_list)))
 	
 	if len(file_list) > 0:
-		files = [file_pair[1] for file_pair in file_list]
+		files = [file_pair[2] for file_pair in file_list]
 		response = str(files).strip('[]')
 		conn.sendall(response)
 
@@ -28,12 +29,10 @@ def send_file_list(conn):
 
 
 def clientthread(conn, addr):
-	if next_host != 0:
-		conn.sendall("NEXTHOST")
-	else:
-		conn.sendall("Welcome")
+	conn.sendall("Welcome")
 
 	while True:
+		print "waiting for request"
 		data = conn.recv(1024)
 
 		if data == "list":
@@ -74,8 +73,13 @@ def clientthread(conn, addr):
 
 
 
+	# Also need to remove all files for conn from the file_list
 
-	conn.close()
+	# also need to remove conn from conns list. 
+
+	conn.close() # close connection
+	sys.exit() # terminate threa
+
 
 def inputthread(socket):
 	print "Input thread running"
@@ -84,6 +88,8 @@ def inputthread(socket):
 
 		if user_input == "exit":
 			print "exit received"
+			#PICK A CONNECTION
+
 			[conn.close() for conn in conns]
 			socket.close()
 			os._exit(1)

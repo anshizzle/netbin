@@ -3,6 +3,7 @@ import socket
 import os
 from thread import *
 import pdb
+import netbin_host
 
 next_host = 0
 LISTEN_PORT = 7900
@@ -77,29 +78,7 @@ def client_listener(port):
 		print data + " " + file_name + " from " + addr
 
 
-
-
-
-def start(host, port):
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	result = s.connect_ex((host, port))
-
-	if result > 0: 
-		printError("Could not connect to server.")
-
-	print "Connected to host"
-
-	msg = s.recv(4096)
-
-	if msg == "NEXTHOST":
-		next_host=1
-		print "You are going to be the next host."
-	else:
-		print "Welcome to netbin!"
-
-	start_new_thread(client_listener, (LISTEN_PORT, ))
-
-
+def client_input(is_host):
 	while 1:
 		print ">"
 		user_input = raw_input()
@@ -124,15 +103,41 @@ def start(host, port):
 		elif user_input.startswith("download"):
 			download_file(s)
 
-		else: 
-			s.sendall(user_input)
-			try:
-				reply = s.recv(4096)
-				print reply
-			except socket.error:
-				printError("Failed to receive the message.")
-			if user_input == "exit":
+		elif user_input == "exit":
+			if is_host:
+				netbin_host.exit()
+			else:
 				break
+
+		else: 
+			print "Invalid command"
+
+
+
+
+
+def start(host, port):
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	result = s.connect_ex((host, port))
+
+	if result > 0: 
+		printError("Could not connect to server.")
+
+	print "Connected to host"
+
+	msg = s.recv(4096)
+
+	if msg == "NEXTHOST":
+		next_host=1
+		print "You are going to be the next host."
+	else:
+		print "Welcome to netbin!"
+
+	start_new_thread(client_listener, (LISTEN_PORT, ))
+
+	client_input(False)
+
+
 			
 
 	s.close()
