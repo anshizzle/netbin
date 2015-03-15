@@ -25,9 +25,10 @@ class netbin_tcp:
 
 		# actually read the data
 		file_data = ""
+		netbin_fh = constants.NETBIN_DIR + fh
 
 		try:
-			f = open(fh, 'wb')
+			f = open(netbin_fh, 'wb')
 		except IOError:
 			printDebug("check that file exists", "tcp")
 

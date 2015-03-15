@@ -4,6 +4,7 @@ import pdb
 import os
 from util import *
 from netbin_udp import *
+import ntpath
 # User made an upload command
 # If length is less than 2, user did not add a file name.
 #
@@ -16,6 +17,22 @@ def upload(s, user_input):
 			s.sendall("upload "+fileinput[1])
 			reply = s.recv(constants.GEN_PACKET_LENGTH)
 			print reply
+
+
+			if "/" in fileinput[1]:
+				filename = ntpath.basename(fileinput[1])
+			else:
+				filename = fileinput[1]
+
+			netbin_fh = constants.NETBIN_DIR + filename
+			netbin_f = open(netbin_fh, 'w')
+			netbin_f.close()
+
+			with open(filename, 'r') as f1:
+				with open(netbin_f, 'w') as f2:
+					for line in f:
+						f2.write(line)
+
 		else:
 			print constants.INVALID_FILE_UPLOAD
 
