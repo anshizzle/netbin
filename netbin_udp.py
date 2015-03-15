@@ -144,6 +144,7 @@ class netbin_udp:
 				try:
 					released_port = int(data)
 					self.available_tcp_ports.insert(0, released_port)
+					printDebug("Releasing TCP Port " + str(released_port), "udp")
 					self.s_comm.sendto("RELEASESUCCESSFUL", addr)
 				except ValueError:
 					self.s_comm.sendto("INVALIDPORT", addr)
@@ -195,7 +196,8 @@ class netbin_udp:
 
 	def release_tcp_port(self, port):
 		self.s_comm.sendto("RELEASINGTCPPORT " + str(port), (hostAddr, constants.HOST_LISTEN_PORT))
-		self.s_comm.recv(1024)
+		reply = self.s_comm.recv(1024)
+		printDebug("TCP Release " + str(port) + " reply: " + reply, "udp")
 
 	def send_tcp_open_msg(self, port, addr):
 		self.s_comm.sendto("TCPOPEN " + str(port), addr)
