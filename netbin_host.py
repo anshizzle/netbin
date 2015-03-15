@@ -46,10 +46,13 @@ def manage_client(s, addr):
 		except socket.error:
 			printDebug("Client socket error!", "dh")
 			clear_connection(s, addr)
-			break
+			s.close()
+			sys.exit()
+			return
 
 
 	clear_connection(s, addr)
+
 
 	s.sendall("Closing connection")
 	s.close() # close connection
