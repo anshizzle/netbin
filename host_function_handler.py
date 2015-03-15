@@ -1,20 +1,44 @@
 import socket
 import constants
+from util import *
+
+
+## Returns a pair SUCCESS, file_list
+# Success is 1 if the file was added successfully
+# 	is -1 if there was already a file with that name in the list
+
+def add_file_to_file_list(file_name, file_list, addr):
+	# Check if there is a file with that name already in the file_list
+	m_file = next((file_pair for file_pair in file_list if file_pair[1] == file_name), None)
+
+	if m_file is not None:
+		return [-1, file_list]
+	else:
+		file_list.append([addr, file_name])
+		return [1, file_list]
+
+
+# Currently file_pair is [addr, file_name]
+# Returns file_name
+# Created this function so that as we add information to a file "pair", we won't have to edit
+# this conversion in multiple places (netbin_host#list, host_function_handler#list)
+
+def convert_file_pair_to_list_string(file_pair):
+	return file_pair[1]
 
 # LIST COMMAND - HOST
 #
-#	First sends the number of files, padded to LIST_INIT_PACKET_LENGTH chars.
-#	Next sends each file name, padded to LIST_FILE_PACKET_LENGTH chars.
+#	uses delimiter to separate each segment of information
 #
 def list(s, file_list):
 	num_files = str(len(file_list))
 	
-	s.sendall(num_files+constants.LIST_ITEM_DIVIDER)
+	s.sendall(num_files+constants.LIST_ITEM_DELIMITER)
 
 	if len(file_list) > 0:
 		for fp in file_list:
-			fn = fp[1]
-			s.sendall(fn + constants.LIST_ITEM_DIVIDER)
+			fn = convert_file_pair_to_list_string(fp)
+			s.sendall(fn + constants.LIST_ITEM_DELIMITER)
 
 
 
@@ -25,16 +49,17 @@ def upload(s, file_list, user_input, addr):
 	if len(upload) < 2:
 		s.sendall("ERROR: Filename not received.")
 	else:
-		# TODO: check if there is already a file with that name in the list.
-		m_file = next((file_pair for file_pair in file_list if file_pair[1] == upload[1]), None)
+		result, file_list = add_file_to_file_list(upload[1], file_list, addr[0])
+		
 
-		if m_file is not None and s is not None:
+		if result == -1:
 			s.sendall("There is already a file with that name hosted. Please try a different file name")
-		else:
-			file_list.append([addr[0], upload[1]])
+		elif result == 1:
 			s.sendall(upload[1] + " uploaded!")
 			print "current file list is "
 			print file_list
+		else:
+			s.sendall("Unidentified error occurred, Code " + str(result))
 
 	return file_list
 

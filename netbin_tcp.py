@@ -43,7 +43,9 @@ class netbin_tcp:
 						break
 					f.write(file_data)
 				except socket.error as serr:
-					printDebug("Socket Error " + str(serr.errno), "tcp")		
+					printDebug("Netbin_TCP:46 - Socket Error " + str(serr.errno), "tcp")	
+					udp_sock.release_tcp_port(self.port)
+	
 
 
 		f.close()

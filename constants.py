@@ -15,10 +15,15 @@ UPLOAD_CMDS = ["upload", "up"]
 EXIT_CMDS = ["exit", "quit", "q"]
 
 FILE_END_SIGNAL = "EOFAFD12039!!^^"
-LIST_ITEM_DIVIDER = "|,.|"
+LIST_ITEM_DELIMITER = "|,.|"
 
 
 INVALID_FILE_UPLOAD = "File not found"
+NO_FILES_STRING =  "No files currently on netbin"
+
+
+def list_file_num_string(num):
+	return str(num) + " files on netbin currently"
 
 
 

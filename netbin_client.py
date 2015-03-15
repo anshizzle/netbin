@@ -5,7 +5,7 @@ import client_function_handler
 from netbin_udp import *
 import constants
 from thread import *
-
+import netbin_host
 
 
 def download_file(s):
@@ -14,7 +14,7 @@ def download_file(s):
 
 def client_input(is_host, s, udp_socket):
 	while 1:
-		user_input = raw_input("> ")
+		user_input = raw_input("netbin> ")
 		if any(user_input == cmd for cmd in constants.EXIT_CMDS):
 			if is_host:
 				netbin_host.exit(s)
@@ -30,10 +30,15 @@ def client_input(is_host, s, udp_socket):
 			else:
 				client_function_handler.upload(s, user_input)
 		elif any(user_input.startswith(cmd) for cmd in constants.LIST_CMDS): # LIST
-			print "Sending list request"
-			client_function_handler.list(s)
+			if is_host:
+				netbin_host.list()
+			else:
+				client_function_handler.list(s)
 		elif any(user_input.startswith(cmd) for cmd in constants.DOWNLOAD_CMDS): # DOWNLOAD
-			client_function_handler.download_file(s, user_input, udp_socket)
+			if is_host:
+				netbin_host.download(user_input, udp_socket)
+			else:
+				client_function_handler.download_file(s, user_input, udp_socket)
 		else: 
 			print "Invalid command"
 

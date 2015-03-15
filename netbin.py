@@ -24,7 +24,7 @@ def send_is_host_query(subnet, sock, m_range):
 start = timer()
 lNodes = {}
 pAddress = []
-
+my_ip = ""
 ##FIND THE SUBNET MASK
 subnet = ""
 enArray = [ x for x in netifaces.interfaces() if x.startswith('en') ]
@@ -36,12 +36,14 @@ if(enArray):
 			print bcTuple[2]
 			if ('broadcast' in bcTuple[2][0]):
 				subnet = re.match("^\d+.\d+.[^.]", bcTuple[2][0]['broadcast']).group(0)+'.'
+				my_ip = bcTuple[2][0]['addr']
 				break
 
 ## IF NO SUBNET FOUND, TERMINATE
 if(subnet == ""):
 	print("NO SUBNET FOUND!")
 	sys.exit()
+
 
 
 pAddress.extend(range(1, 255))
@@ -80,7 +82,11 @@ if hostAddr:
 	netbin_client.start(hostAddr, constants.HOST_PORT)
 
 else:
-	netbin_host.start(constants.HOST_PORT)
+	if my_ip == "":
+		print "Tried to initialize a host process, but could not find device's LAN IP."
+		print "Please restart netbin."
+		sys.exit()
+	netbin_host.start(constants.HOST_PORT, my_ip)
 
 
 

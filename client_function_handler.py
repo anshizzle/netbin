@@ -23,7 +23,7 @@ def list(s):
 	s.sendall("list")	
 
 	raw = s.recv(constants.GEN_PACKET_LENGTH)
-	list_data = raw.split(constants.LIST_ITEM_DIVIDER)
+	list_data = raw.split(constants.LIST_ITEM_DELIMITER)
 
 	try:
 		num_files = int(list_data.pop(0))
@@ -34,16 +34,16 @@ def list(s):
 
 
 	if num_files == 0:
-		print "No files currently on the network\n"
+		print constants.NO_FILES_STRING
 	else:
 		count = 0
-		print "There are currently " + str(num_files) + " files on netbin"
+		print constants.list_file_num_string(num_files)
 
 		s.settimeout(None)
 		while count < num_files:
 			if not list_data or list_data[0] == "":
 				raw = s.recv(constants.GEN_PACKET_LENGTH)
-				list_data = raw.split(constants.LIST_ITEM_DIVIDER)
+				list_data = raw.split(constants.LIST_ITEM_DELIMITER)
 
 
 			file_name = list_data.pop(0)
@@ -60,5 +60,8 @@ def download_file(s, user_input, my_udp):
 		print "USAGE: download target dest"
 	else:
 		s.sendall("download " + fileinput[1])
-		reply = s.recv(constants.GEN_PACKET_LENGTH) #ip address
-		my_udp.send_request(fileinput[1], fileinput[2], reply)
+		reply = s.recv(constants.GEN_PACKET_LENGTH) #Reply is either the IP address or an error.
+		if not reply.startswith("ERROR"):
+			my_udp.send_request(fileinput[1], fileinput[2], reply)
+		else:
+			print reply
