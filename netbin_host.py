@@ -31,7 +31,6 @@ def manage_client(s, addr):
 		
 
 			if any(data.startswith(cmd) for cmd in constants.LIST_CMDS):
-				print "list request received"
 				host_function_handler.list(s, file_list)
 			elif any(data.startswith(cmd) for cmd in constants.UPLOAD_CMDS):
 				file_list = host_function_handler.upload(s, file_list, data, addr)
