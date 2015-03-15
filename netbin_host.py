@@ -115,7 +115,6 @@ def list():
 	if num_files > 0:
 		print constants.list_file_num_string(num_files)
 		for fp in file_list:
-			print str(fp)
 			fn = host_function_handler.convert_file_pair_to_list_string(fp)
 			print fn
 	else:
