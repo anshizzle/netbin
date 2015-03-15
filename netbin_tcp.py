@@ -26,10 +26,9 @@ class netbin_tcp:
 
 		# actually read the data
 		file_data = ""
-		netbin_fh = constants.NETBIN_DIR + fh
 
 		try:
-			f = open(netbin_fh, 'wb')
+			f = open(fh, 'wb')
 		except IOError:
 			printDebug("check that file exists", "tcp")
 
@@ -70,10 +69,10 @@ class netbin_tcp:
 	def tcp_send(self, fh, addr):
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		fd = ""
-
+		netbin_fh = constants.NETBIN_DIR + fh
 		sock.connect_ex((addr, self.port))
 		try:
-			with open(fh, 'rb') as f:
+			with open(netbin_fh, 'rb') as f:
 				while True:
 					fd = f.read(constants.GEN_PACKET_LENGTH)
 					printDebug(fd, "f")
