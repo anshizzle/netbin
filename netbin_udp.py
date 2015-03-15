@@ -4,6 +4,40 @@ import constants
 from util import *
 
 
+def send_udp_message(s, msg, addr):
+    # DETERMINE LENGTH OF MESSAGE
+    try :
+        #send the whole command
+        s.sendto(msg, addr)
+         
+        # Get ACK from client
+        package_acked = 0
+        count = 1 #
+
+        s.settimeout(.500)
+
+        while not package_acked and count < 3:
+            # print "Waiting for ACK for " + msg 
+            try:
+                d = s.recvfrom(1024)
+                reply = d[0]
+                if reply == "ACK":
+                    package_acked = 1
+            except socket.error:
+                s.sendto(msg, addr)
+                count = count + 1
+
+        if count >= 3:
+            printDebug("UDP Message failed to send", "udp")
+
+
+    except socket.error, msg:
+    	printDebug("UDP Message failed to send", "udp")
+
+
+
+
+
 def receive_host_message(s):
 	message=""
 	data=""
@@ -136,7 +170,7 @@ class netbin_udp:
 			msg, data, addr = receive_host_message(self.s)
 			if msg == "ISHOST":
 				printDebug("Received ISHOST Request from " + addr[0], "udp")
-				self.s.sendto("IAMHOST", addr)
+				send_udp_message(self.s, "IAMHOST", addr)
 			elif msg == "NEEDTCPPORT":
 				printDebug("Received request for TCP Port from " + addr[0], "udp")
 				self.s_comm.sendto(str(self.available_tcp_ports.pop()), addr)

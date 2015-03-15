@@ -31,7 +31,6 @@ def manage_client(s, addr):
 		
 
 			if any(data.startswith(cmd) for cmd in constants.LIST_CMDS):
-				print "list request received"
 				host_function_handler.list(s, file_list)
 			elif any(data.startswith(cmd) for cmd in constants.UPLOAD_CMDS):
 				file_list = host_function_handler.upload(s, file_list, data, addr)
@@ -46,10 +45,13 @@ def manage_client(s, addr):
 		except socket.error:
 			printDebug("Client socket error!", "dh")
 			clear_connection(s, addr)
-			break
+			s.close()
+			sys.exit()
+			return
 
 
 	clear_connection(s, addr)
+
 
 	s.sendall("Closing connection")
 	s.close() # close connection
