@@ -26,7 +26,7 @@ def receive_host_message(s):
 		else:
 			message ="INVALID"
 	except socket.error:
-		print "Failed to receive message"
+		print "HOST UDP: Socket error"
 
 	return [message,data,addr]
 
@@ -135,7 +135,7 @@ class netbin_udp:
 		while 1:
 			msg, data, addr = receive_host_message(self.s)
 			if msg == "ISHOST":
-				print "Received ISHOST Request from " + addr[0]
+				printDebug("Received ISHOST Request from " + addr[0], "udp")
 				self.s.sendto("IAMHOST", addr)
 			elif msg == "NEEDTCPPORT":
 				printDebug("Received request for TCP Port from " + addr[0], "udp")
