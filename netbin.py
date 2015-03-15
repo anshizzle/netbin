@@ -28,6 +28,8 @@ pAddress = []
 ##FIND THE SUBNET MASK
 subnet = ""
 enArray = [ x for x in netifaces.interfaces() if x.startswith('en') ]
+if not enArray: enArray = [ x for x in netifaces.interfaces() if x.startswith('eth') ]
+
 if(enArray):
 	for en in enArray:
 		print netifaces.ifaddresses(en).keys()
