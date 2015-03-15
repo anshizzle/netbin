@@ -53,12 +53,12 @@ class netbin_tcp:
 					print "Error downloading file. Please try again."
 					break		
 
-		if download_complete:
-			print "Download complete!"
-			print "Transfer took " + (timer() - start) + " to complete"
-
 		f.close()
 		con.close()
+		if download_complete:
+			print "Download complete!"
+			print "Transfer took " + str(timer() - start) + " to complete"
+
 
 		printDebug("REACHED END OF TRANSMISSION", "f")
 		printDebug("Number of transmissions: " + str(count), "f")
