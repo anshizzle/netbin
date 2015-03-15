@@ -19,7 +19,9 @@ def client_input(is_host, s, udp_socket):
 			if is_host:
 				netbin_host.exit(s)
 			else:
-				s.sendall("EXIT")
+				s.sendall("exit")
+				response = s.recv(constants.GEN_PACKET_LENGTH)
+				print response
 				break
 		# before sending make sure they are sending legit files before sending
 		elif any(user_input.startswith(cmd) for cmd in constants.UPLOAD_CMDS): #UPLOAD

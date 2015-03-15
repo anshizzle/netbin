@@ -30,12 +30,9 @@ TODO:
 
 
 	PRIORITY
-	- LIST COMMAND
-	- RELEASE TCP PORTS
+	- LIST COMMAND - done, tested.
+	- RELEASE TCP PORTS - done, but not tested
 	- ERROR CATCHING
 	- NETBIN FILE STRUCTURE, copying files into that
-	- SEND MESSAGE
+	- SEND MESSAGE UDP Function
 
-
-	def release_tcp_port(self, port):
-		self.s_comm.sendto("RELEASINGTCPPORT " + str(port), (hostAddr, constants.HOST_LISTEN_PORT))

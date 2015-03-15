@@ -193,5 +193,9 @@ class netbin_udp:
 		return port
 
 
+	def release_tcp_port(self, port):
+		self.s_comm.sendto("RELEASINGTCPPORT " + str(port), (hostAddr, constants.HOST_LISTEN_PORT))
+		self.s_comm.recv(1024)
+
 	def send_tcp_open_msg(self, port, addr):
 		self.s_comm.sendto("TCPOPEN " + str(port), addr)

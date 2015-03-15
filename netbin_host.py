@@ -29,7 +29,8 @@ def manage_client(s, addr):
 		try:
 			data = s.recv(1024)
 		except socket.error:
-			printDebug("Socket error!", "d")
+			printDebug("Client socket error!", "dh")
+			clear_connection(s, addr)
 			break
 
 		if any(data.startswith(cmd) for cmd in constants.LIST_CMDS):
@@ -40,8 +41,7 @@ def manage_client(s, addr):
 		elif any(data.startswith(cmd) for cmd in constants.DOWNLOAD_CMDS):
 			host_function_handler.download(s, file_list, data)
 		elif any(data == cmd for cmd in constants.EXIT_CMDS):
-			print "Closing connection with " + addr[0]
-			s.sendall("Closing connection")
+			printDebug("Closing connection with " + addr[0], "h")
 			break
 		else:
 			s.sendall("Command unrecognized")
@@ -49,17 +49,26 @@ def manage_client(s, addr):
 
 
 
-	# Also need to remove all files for conn from the file_list
-	tmp = [file_pair for file_pair in file_list if file_list[0] != addr[0]]
-	file_list = tmp
-
-	# also need to remove conn from conns list. 
-	tmp = [conn_pair for conn_pair in conns if conns[0] != addr]
-	conns = tmp
-
 	
+
+	s.sendall("Closing connection")
 	s.close() # close connection
 	sys.exit() # terminate threa
+
+
+def clear_connection(conn, addr):
+	global file_list
+	global conns
+
+	# Also need to remove all files for conn from the file_list
+	file_list = [file_pair for file_pair in file_list if file_pair[0] != addr[0]]	
+	printDebug("New File List is ", "h")
+	printDebug(str(file_list), "h")
+
+	# also need to remove conn from conns list. 
+	conns = [conn_pair for conn_pair in conns if conn_pair[1] != addr]
+	printDebug("New Conns List is ", "h")
+	printDebug(str(conns), "h")	
 
 
 def inputthread(s):

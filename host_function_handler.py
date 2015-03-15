@@ -8,14 +8,13 @@ import constants
 #
 def list(s, file_list):
 	num_files = str(len(file_list))
-	padding = '-'*(constants.LIST_INIT_PACKET_LENGTH/38 - len(num_files)/38)
-	s.sendall(num_files+padding)
+	
+	s.sendall(num_files+constants.LIST_ITEM_DIVIDER)
 
 	if len(file_list) > 0:
 		for fp in file_list:
 			fn = fp[1]
-			padding = '-' * (constants.LIST_FILE_PACKET_LENGTH/38 - len(fn)/38)
-			s.sendall(fn + padding)
+			s.sendall(fn + constants.LIST_ITEM_DIVIDER)
 
 
 

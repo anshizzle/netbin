@@ -1,2 +1,2 @@
 def printDebug(message, flag):
-	print "DEBUG: " + message
+	print "DEBUG-" + flag + ": " + message

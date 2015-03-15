@@ -1,6 +1,5 @@
 import sys
-LIST_INIT_PACKET_LENGTH = 64
-LIST_FILE_PACKET_LENGTH = 1024
+
 GEN_PACKET_LENGTH = 1024
 
 HOST_PORT = 7878
@@ -16,8 +15,11 @@ UPLOAD_CMDS = ["upload", "up"]
 EXIT_CMDS = ["exit", "quit", "q"]
 
 FILE_END_SIGNAL = "EOFAFD12039!!^^"
+LIST_ITEM_DIVIDER = "|,.|"
+
 
 INVALID_FILE_UPLOAD = "File not found"
+
 
 
 

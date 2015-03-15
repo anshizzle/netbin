@@ -52,6 +52,10 @@ class netbin_tcp:
 		printDebug("REACHED END OF TRANSMISSON", "f")
 		printDebug("Number of transmissions: " + str(count), "f")
 
+		# Need to release tcp port
+		udp_sock.release_tcp_port(self.port)
+		
+
 	def tcp_send(self, fh, addr):
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		fd = ""
@@ -61,7 +65,7 @@ class netbin_tcp:
 			with open(fh, 'rb') as f:
 				while True:
 					fd = f.read(constants.GEN_PACKET_LENGTH)
-					print fd
+					printDebug(fd, "f")
 					try:
 						sock.sendall(fd)
 					except socket.error:
