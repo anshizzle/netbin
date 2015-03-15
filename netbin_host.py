@@ -99,8 +99,21 @@ def upload(s, user_input):
 	if len(file_input) < 2:
 		print "USAGE: upload filename"
 	else:
-		netbin_fh = constants.NETBIN_DIR + file_input[1]
-		if os.path.isfile(netbin_fh):
+		if os.path.isfile(file_input[1]):
+			if "/" in file_input[1]:
+				filename = ntpath.basename(file_input[1])
+			else:
+				filename = file_input[1]
+
+			netbin_fh = constants.NETBIN_DIR + filename
+			netbin_f = open(netbin_fh, 'w')
+			netbin_f.close()
+
+			with open(filename, 'r') as f1:
+				with open(netbin_fh, 'w') as f2:
+					for line in f1:
+						f2.write(line)
+
 			result, file_list = host_function_handler.add_file_to_file_list(netbin_fh, file_list,host_ip)
 			if result == -1:
 				print "There is already a file with that name hosted. Please try a different file name"
