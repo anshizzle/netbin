@@ -17,6 +17,7 @@ EXIT_CMDS = ["exit", "quit", "q"]
 FILE_END_SIGNAL = "EOFAFD12039!!^^"
 LIST_ITEM_DELIMITER = "|,.|"
 
+NETBIN_DIR = "Netbin/"
 
 INVALID_FILE_UPLOAD = "File not found"
 NO_FILES_STRING =  "No files currently on netbin"
@@ -24,9 +25,6 @@ NO_FILES_STRING =  "No files currently on netbin"
 
 def list_file_num_string(num):
 	return str(num) + " files on netbin currently"
-
-
-
 
 def printError(error):
 	print "ERROR: " + error + ' Terminating.\n'

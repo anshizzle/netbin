@@ -1,4 +1,5 @@
 import sys
+import os
 import socket
 import client_function_handler
 
@@ -61,6 +62,12 @@ def start(host, port):
 	msg = s.recv(4096)
 
 	print "Welcome to netbin!"
+
+	# check for netbin folder if not located then create one
+	net_dir = os.path.dirname(constants.NETBIN_DIR)
+	if not os.path.exists(net_dir):
+		os.makedirs(net_dir)
+		print "created netbin directory"
 
 	client_input(False, s, my_udp)
 
