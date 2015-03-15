@@ -26,7 +26,7 @@ def receive_host_message(s):
 		else:
 			message ="INVALID"
 	except socket.error:
-		print "Failed to receive message"
+		print "HOST UDP: Socket error"
 
 	return [message,data,addr]
 
@@ -125,7 +125,7 @@ class netbin_udp:
 	def host_listener(self):
 		self.available_tcp_ports.reverse()
 		# printDebug(str(self.available_tcp_ports), "udp")
-		print "binding UDP at host " + self.host + " with port " + str(self.receive_port)
+		printDebug("binding UDP at host " + self.host + " with port " + str(self.receive_port), "udp")
 		try:
 			self.s.bind((self.host, self.receive_port))
 			self.s_comm.bind((self.host, self.communicate_port))
@@ -135,7 +135,7 @@ class netbin_udp:
 		while 1:
 			msg, data, addr = receive_host_message(self.s)
 			if msg == "ISHOST":
-				print "Received ISHOST Request from " + addr[0]
+				printDebug("Received ISHOST Request from " + addr[0], "udp")
 				self.s.sendto("IAMHOST", addr)
 			elif msg == "NEEDTCPPORT":
 				printDebug("Received request for TCP Port from " + addr[0], "udp")
@@ -195,7 +195,7 @@ class netbin_udp:
 
 
 	def release_tcp_port(self, port):
-		self.s_comm.sendto("RELEASINGTCPPORT " + str(port), (hostAddr, constants.HOST_LISTEN_PORT))
+		self.s_comm.sendto("RELEASINGTCPPORT " + str(port), (self.hostAddr, constants.HOST_LISTEN_PORT))
 		reply = self.s_comm.recv(1024)
 		printDebug("TCP Release " + str(port) + " reply: " + reply, "udp")
 
