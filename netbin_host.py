@@ -168,6 +168,12 @@ def start(port, ip_addr):
 	s.listen(5)
 	printDebug('Now listening as host', "h")
 
+	# check for netbin folder if not located then create one
+	net_dir = os.path.dirname(constants.NETBIN_DIR)
+	if not os.path.exists(net_dir):
+		os.makedirs(net_dir)
+		printDebug("Created Netbin Directory", "ci")
+
 	client_udp = netbin_udp(constants.LISTEN_PORT, constants.COMMUNICATE_PORT, socket.gethostname())
 	# start_new_thread(netbin_client.client_input, (True, s, host_udp))
 
