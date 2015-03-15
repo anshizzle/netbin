@@ -17,11 +17,9 @@ EXIT_CMDS = ["exit", "quit", "q"]
 FILE_END_SIGNAL = "EOFAFD12039!!^^"
 LIST_ITEM_DIVIDER = "|,.|"
 
+NETBIN_DIR = "Netbin/"
 
 INVALID_FILE_UPLOAD = "File not found"
-
-
-
 
 def printError(error):
 	print "ERROR: " + error + ' Terminating.\n'
