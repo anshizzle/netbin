@@ -33,7 +33,7 @@ def upload(s, user_input):
 
 				with open(filename, 'r') as f1:
 					with open(netbin_fh, 'w') as f2:
-						for line in f:
+						for line in f1:
 							f2.write(line)
 
 			else:
