@@ -20,11 +20,15 @@ LIST_ITEM_DELIMITER = "|,.|"
 NETBIN_DIR = "Netbin/"
 
 INVALID_FILE_UPLOAD = "File not found"
+
+HOST_COMM_ERROR = "There was an error communicating with the host"
 NO_FILES_STRING =  "No files currently on netbin"
 
 
 def list_file_num_string(num):
 	return str(num) + " files on netbin currently"
+
+
 
 def printError(error):
 	print "ERROR: " + error + ' Terminating.\n'

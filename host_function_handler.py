@@ -31,47 +31,60 @@ def convert_file_pair_to_list_string(file_pair):
 #	uses delimiter to separate each segment of information
 #
 def list(s, file_list):
-	num_files = str(len(file_list))
-	
-	s.sendall(num_files+constants.LIST_ITEM_DELIMITER)
+	try:
+		num_files = str(len(file_list))
+		
+		s.sendall(num_files+constants.LIST_ITEM_DELIMITER)
 
-	if len(file_list) > 0:
-		for fp in file_list:
-			fn = convert_file_pair_to_list_string(fp)
-			s.sendall(fn + constants.LIST_ITEM_DELIMITER)
+		if len(file_list) > 0:
+			for fp in file_list:
+				fn = convert_file_pair_to_list_string(fp)
+				s.sendall(fn + constants.LIST_ITEM_DELIMITER)
+
+	except socket.error:
+		print constants.HOST_COMM_ERROR
+		return
 
 
 
 def upload(s, file_list, user_input, addr):
-	upload = user_input.split(' ')
-	# need to check if file is already there.
+	try:
+		upload = user_input.split(' ')
 
-	if len(upload) < 2:
-		s.sendall("ERROR: Filename not received.")
-	else:
-		result, file_list = add_file_to_file_list(upload[1], file_list, addr[0])
-		
-
-		if result == -1:
-			s.sendall("There is already a file with that name hosted. Please try a different file name")
-		elif result == 1:
-			s.sendall(upload[1] + " uploaded!")
-			print "current file list is "
-			print file_list
+		if len(upload) < 2:
+			s.sendall("ERROR: Filename not received.")
 		else:
-			s.sendall("Unidentified error occurred, Code " + str(result))
+			result, file_list = add_file_to_file_list(upload[1], file_list, addr[0])
+			
+
+			if result == -1:
+				s.sendall("There is already a file with that name hosted. Please try a different file name")
+			elif result == 1:
+				s.sendall(upload[1] + " uploaded!")
+				printDebug("current file list is ", "h")
+				printDebug(str(file_list), "h")
+			else:
+				s.sendall("Unidentified error occurred, Code " + str(result))
+
+	except socket.error:
+		print constants.HOST_COMM_ERROR
 
 	return file_list
 
+	
 def download(s, file_list, user_input):
-	download = user_input.split(' ')
-	if len(download) < 2:
-		s.sendall("ERROR: Filename not received.")
-	else:
-		print "Received Download Request for: " + user_input
-		dl_file_pair = next((file_pair for file_pair in file_list if file_pair[1] == download[1]), None)
-		if dl_file_pair == None:
-			s.sendall("ERROR: File not found in list. Are you sure it's been uploaded?")
+	try:
+		download = user_input.split(' ')
+		if len(download) < 2:
+			s.sendall("ERROR: Filename not received.")
 		else:
-			s.sendall(dl_file_pair[0])
-			print "Requested file is available at " + dl_file_pair[0]
+			printDebug("Received Download Request for: " + user_input, "h")
+			dl_file_pair = next((file_pair for file_pair in file_list if file_pair[1] == download[1]), None)
+			if dl_file_pair == None:
+				s.sendall("ERROR: File not found in list. Are you sure it's been uploaded?")
+			else:
+				s.sendall(dl_file_pair[0])
+				printDebug("Requested file is available at " + dl_file_pair[0], "h")
+	except socket.error:
+		print constants.HOST_COMM_ERROR
+		return

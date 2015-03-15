@@ -47,29 +47,31 @@ def client_input(is_host, s, udp_socket):
 
 
 def start(host, port):
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	result = s.connect_ex((host, port))
+	try:
+		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		result = s.connect_ex((host, port))
 
-	if result > 0: 
-		constants.printError("Could not connect to server.")
+		if result > 0: 
+			constants.printError("Could not connect to server.")
 
-	print "Connected to host"
+		print "Connected to host at ", host
 
-	# create a udp listener for each client
-	my_udp = netbin_udp(constants.LISTEN_PORT, constants.COMMUNICATE_PORT, host)
-	start_new_thread(my_udp.listener, ())
+		# create a udp listener for each client
+		my_udp = netbin_udp(constants.LISTEN_PORT, constants.COMMUNICATE_PORT, host)
+		start_new_thread(my_udp.listener, ())
 
-	msg = s.recv(4096)
+		msg = s.recv(4096)
 
-	print "Welcome to netbin!"
+		print "Welcome to netbin!"
 
-	# check for netbin folder if not located then create one
-	net_dir = os.path.dirname(constants.NETBIN_DIR)
-	if not os.path.exists(net_dir):
-		os.makedirs(net_dir)
-		print "created netbin directory"
+		# check for netbin folder if not located then create one
+		net_dir = os.path.dirname(constants.NETBIN_DIR)
+		if not os.path.exists(net_dir):
+			os.makedirs(net_dir)
+			printDebug("Created Netbin Directory", "ci")
+		client_input(False, s, my_udp)
 
-	client_input(False, s, my_udp)
-
-	s.close()
+		s.close()
+	except socket.error:
+		print "Error starting netbin client"
 	sys.exit()

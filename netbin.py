@@ -6,7 +6,6 @@ import sys
 import netifaces
 import re
 import constants
-from timeit import default_timer as timer
 from thread import *
 from util import *
 
@@ -21,7 +20,6 @@ def send_is_host_query(subnet, sock, m_range):
 
 	
 	
-start = timer()
 lNodes = {}
 pAddress = []
 my_ip = ""
@@ -32,10 +30,10 @@ if not enArray: enArray = [ x for x in netifaces.interfaces() if x.startswith('e
 
 if(enArray):
 	for en in enArray:
-		print netifaces.ifaddresses(en).keys()
+		printDebug(str(netifaces.ifaddresses(en).keys()), "i")
 		bcTuple = netifaces.ifaddresses(en)
 		if (2 in bcTuple):
-			print bcTuple[2]
+			printDebug(str(bcTuple[2]), "i")
 			if ('broadcast' in bcTuple[2][0]):
 				subnet = re.match("^\d+.\d+.[^.]", bcTuple[2][0]['broadcast']).group(0)+'.'
 				my_ip = bcTuple[2][0]['addr']
@@ -43,7 +41,7 @@ if(enArray):
 
 ## IF NO SUBNET FOUND, TERMINATE
 if(subnet == ""):
-	print("NO SUBNET FOUND!")
+	print "Could not find subnet mask for LAN - please check your network settings"
 	sys.exit()
 
 
@@ -61,9 +59,6 @@ sock.settimeout(1)
 while 1:
 	try:
 		result, addr = sock.recvfrom(1024)
-		print "Result from host"
-		print result
-		print str(addr)
 		if result == "IAMHOST":
 			sock.sendto("ACK", addr)
 			hostAddr = addr[0]
@@ -80,7 +75,6 @@ sock.close()
 if hostAddr: 
 	## empty strings falsify
 	## another node is already host
-	print "host found! at:", hostAddr
 	netbin_client.start(hostAddr, constants.HOST_PORT)
 
 else:
@@ -92,5 +86,4 @@ else:
 
 
 
-print
-print "RUNTIME: ", (timer()- start)
+

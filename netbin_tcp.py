@@ -5,6 +5,7 @@ import constants
 from netbin_udp import *
 import constants
 from util import *
+from timeit import default_timer as timer
 
 
 
@@ -34,6 +35,9 @@ class netbin_tcp:
 
 		count = 0
 
+		start = timer()
+		download_complete = True
+		print "Beginning download..."
 		while not file_data.endswith(constants.FILE_END_SIGNAL):
 				try:
 					count = count +1
@@ -44,15 +48,19 @@ class netbin_tcp:
 						break
 					f.write(file_data)
 				except socket.error as serr:
-					printDebug("Netbin_TCP:46 - Socket Error " + str(serr.errno), "tcp")	
-					udp_sock.release_tcp_port(self.port)
-	
+					download_complete = False
+					printDebug("TCP Download Socket Error " + str(serr.errno), "tcp")
+					print "Error downloading file. Please try again."
+					break		
 
+		if download_complete:
+			print "Download complete!"
+			print "Transfer took " + (timer() - start) + " to complete"
 
 		f.close()
 		con.close()
 
-		printDebug("REACHED END OF TRANSMISSON", "f")
+		printDebug("REACHED END OF TRANSMISSION", "f")
 		printDebug("Number of transmissions: " + str(count), "f")
 
 		# Need to release tcp port
@@ -72,7 +80,7 @@ class netbin_tcp:
 					try:
 						sock.sendall(fd)
 					except socket.error:
-						printDebug("socket error", "tcp")
+						printDebug("TCP Upload socket error", "tcp")
 					if not fd:
 						break
 
@@ -82,7 +90,7 @@ class netbin_tcp:
 		try:
 			sock.sendall(constants.FILE_END_SIGNAL)
 		except socket.error:
-			printDebug("Socket error", "tcp")
+			printDebug("TCP Upload Socket error", "tcp")
 		
 
 		finally:

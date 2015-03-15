@@ -28,25 +28,25 @@ def manage_client(s, addr):
 	while True:
 		try:
 			data = s.recv(1024)
+		
+
+			if any(data.startswith(cmd) for cmd in constants.LIST_CMDS):
+				print "list request received"
+				host_function_handler.list(s, file_list)
+			elif any(data.startswith(cmd) for cmd in constants.UPLOAD_CMDS):
+				file_list = host_function_handler.upload(s, file_list, data, addr)
+			elif any(data.startswith(cmd) for cmd in constants.DOWNLOAD_CMDS):
+				host_function_handler.download(s, file_list, data)
+			elif any(data == cmd for cmd in constants.EXIT_CMDS):
+				printDebug("Closing connection with " + addr[0], "h")
+				break
+			else:
+				s.sendall("Command unrecognized")
+
 		except socket.error:
 			printDebug("Client socket error!", "dh")
 			clear_connection(s, addr)
 			break
-
-		if any(data.startswith(cmd) for cmd in constants.LIST_CMDS):
-			print "list request received"
-			host_function_handler.list(s, file_list)
-		elif any(data.startswith(cmd) for cmd in constants.UPLOAD_CMDS):
-			file_list = host_function_handler.upload(s, file_list, data, addr)
-		elif any(data.startswith(cmd) for cmd in constants.DOWNLOAD_CMDS):
-			host_function_handler.download(s, file_list, data)
-		elif any(data == cmd for cmd in constants.EXIT_CMDS):
-			printDebug("Closing connection with " + addr[0], "h")
-			break
-		else:
-			s.sendall("Command unrecognized")
-
-
 
 
 	clear_connection(s, addr)
@@ -163,7 +163,7 @@ def start(port, ip_addr):
 		constants.printError('Could not bind port. Please restart netbin')
 
 	s.listen(5)
-	print 'Now listening '
+	printDebug('Now listening as host', "h")
 
 	client_udp = netbin_udp(constants.LISTEN_PORT, constants.COMMUNICATE_PORT, socket.gethostname())
 	# start_new_thread(netbin_client.client_input, (True, s, host_udp))
