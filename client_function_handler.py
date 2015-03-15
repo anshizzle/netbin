@@ -32,7 +32,7 @@ def upload(s, user_input):
 				netbin_f.close()
 
 				with open(filename, 'r') as f1:
-					with open(netbin_f, 'w') as f2:
+					with open(netbin_fh, 'w') as f2:
 						for line in f:
 							f2.write(line)
 
