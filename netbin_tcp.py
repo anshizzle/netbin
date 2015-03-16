@@ -39,7 +39,7 @@ class netbin_tcp:
 		print "Beginning download..."
 		while not file_data.endswith(constants.FILE_END_SIGNAL):
 				try:
-					print "."
+					sys.stdout.write('.')
 					count = count +1
 					file_data = con.recv(constants.GEN_PACKET_LENGTH)
 					if file_data.endswith(constants.FILE_END_SIGNAL):

@@ -145,6 +145,8 @@ def download(user_input, udp):
 
 	if dl_file_pair == None:
 		print "ERROR: File not found in list. Are you sure it's been uploaded?"
+	elif len(dl_string) < 3:
+		print "USAGE: download src dest"
 	else:
 		udp.send_request(dl_string[1], dl_string[2], dl_file_pair[0])
 
