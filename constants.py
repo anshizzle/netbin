@@ -31,6 +31,6 @@ def list_file_num_string(num):
 
 
 def printError(error):
-	print "ERROR: " + error + ' Terminating.\n'
+	print "ERROR: " + error + '.\n'
 	sys.exit()
 
