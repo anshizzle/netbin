@@ -2,6 +2,7 @@ import socket
 from netbin_tcp import *
 import constants
 from util import *
+import os
 
 
 def send_udp_message(s, msg, addr):
