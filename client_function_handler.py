@@ -17,10 +17,7 @@ def upload(s, user_input):
 			print "USAGE: upload filename"
 		else:
 			if(os.path.isfile(fileinput[1])):
-				reply = s.recv(constants.GEN_PACKET_LENGTH)
-				print reply
-
-
+				
 				if "/" in fileinput[1]:
 					filename = ntpath.basename(fileinput[1])
 				else:
@@ -28,12 +25,17 @@ def upload(s, user_input):
 
 				netbin_fh = constants.NETBIN_DIR + filename
 				
-				s.sendall("upload "+filename)
+				s.sendall("upload " + filename)
+
 
 				with open(fileinput[1], 'r') as f1:
 					with open(netbin_fh, 'w') as f2:
 						for line in f1:
 							f2.write(line)
+
+				reply = s.recv(constants.GEN_PACKET_LENGTH)
+				print reply
+
 
 			else:	
 				print constants.INVALID_FILE_UPLOAD
