@@ -125,7 +125,7 @@ class netbin_udp:
 			self.s_comm.bind((self.host, self.communicate_port))
 		except socket.error, msg:
 			constants.printError('Could not bind passive listener to port.')
-			os._exit()
+			os._exit(1)
 		while 1:
 			message, file_name, addr = receive_message(self.s, self.s_comm)
 			print file_name + "\n"
@@ -168,7 +168,7 @@ class netbin_udp:
 			# print "Successfully bound UDP Passive Listener for Host with Port" + str(self.port)
 		except socket.error, msg:
 			constants.printError('Could not bind passive host listener or communicator to port.')
-			os._exit()
+			os._exit(1)
 		while 1:
 			msg, data, addr = receive_host_message(self.s)
 			if msg == "ISHOST":
