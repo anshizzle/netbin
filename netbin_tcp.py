@@ -39,6 +39,7 @@ class netbin_tcp:
 		print "Beginning download..."
 		while not file_data.endswith(constants.FILE_END_SIGNAL):
 				try:
+					print "."
 					count = count +1
 					file_data = con.recv(constants.GEN_PACKET_LENGTH)
 					if file_data.endswith(constants.FILE_END_SIGNAL):
@@ -56,7 +57,7 @@ class netbin_tcp:
 		con.close()
 		if download_complete:
 			print "Download complete!"
-			print "Transfer took " + str(timer() - start) + " to complete"
+			print "Transfer took " + str(timer() - start) + "seconds to complete"
 
 
 		printDebug("REACHED END OF TRANSMISSION", "f")
@@ -75,7 +76,7 @@ class netbin_tcp:
 			with open(netbin_fh, 'rb') as f:
 				while True:
 					fd = f.read(constants.GEN_PACKET_LENGTH)
-					printDebug(fd, "f")
+					# printDebug(fd, "f")
 					try:
 						sock.sendall(fd)
 					except socket.error:
