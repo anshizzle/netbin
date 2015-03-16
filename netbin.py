@@ -55,7 +55,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 for li in address_groups:
 	start_new_thread(send_is_host_query, (subnet, sock, li, ))
 
-sock.settimeout(1)
+sock.settimeout(2.5)
 while 1:
 	try:
 		result, addr = sock.recvfrom(1024)

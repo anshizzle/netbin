@@ -21,18 +21,5 @@ Having host operate as client.
 
 
 TODO:
-	- SEND MESSAGE METHOD
-	- HOST OPERATING AS CLIENT
 	- TRANSFER HOST RESPONSIBILITIES
-	- MAKING FILES (IF TIME)
-	- RESOLVE MULTIPLE HOSTS
-	- HANDLE LARGER FILES
-
-
-	PRIORITY
-	- LIST COMMAND - done, tested.
-	- RELEASE TCP PORTS - done, but not tested
-	- ERROR CATCHING
-	- NETBIN FILE STRUCTURE, copying files into that
-	- SEND MESSAGE UDP Function
-
+	- Multithread for large files.
