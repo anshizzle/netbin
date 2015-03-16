@@ -114,7 +114,7 @@ def upload(s, user_input):
 					for line in f1:
 						f2.write(line)
 
-			result, file_list = host_function_handler.add_file_to_file_list(netbin_fh, file_list,host_ip)
+			result, file_list = host_function_handler.add_file_to_file_list(filename, file_list,host_ip)
 			if result == -1:
 				print "There is already a file with that name hosted. Please try a different file name"
 			else:

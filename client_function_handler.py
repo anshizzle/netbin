@@ -17,7 +17,6 @@ def upload(s, user_input):
 			print "USAGE: upload filename"
 		else:
 			if(os.path.isfile(fileinput[1])):
-				s.sendall("upload "+fileinput[1])
 				reply = s.recv(constants.GEN_PACKET_LENGTH)
 				print reply
 
@@ -28,21 +27,16 @@ def upload(s, user_input):
 					filename = fileinput[1]
 
 				netbin_fh = constants.NETBIN_DIR + filename
-				netbin_f = open(netbin_fh, 'w')
-				netbin_f.close()
+				
+				s.sendall("upload "+filename)
 
 				with open(filename, 'r') as f1:
 					with open(netbin_fh, 'w') as f2:
 						for line in f1:
 							f2.write(line)
 
-			else:
-				if(os.path.isfile(fileinput[1])):
-					s.sendall("upload "+fileinput[1])
-					reply = s.recv(constants.GEN_PACKET_LENGTH)
-					print reply
-				else:
-					print constants.INVALID_FILE_UPLOAD
+			else:	
+				print constants.INVALID_FILE_UPLOAD
 	except socket.error:
 		print constants.HOST_COMM_ERROR
 		return
