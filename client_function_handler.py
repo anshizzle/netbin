@@ -30,7 +30,7 @@ def upload(s, user_input):
 				
 				s.sendall("upload "+filename)
 
-				with open(filename, 'r') as f1:
+				with open(fileinput[1], 'r') as f1:
 					with open(netbin_fh, 'w') as f2:
 						for line in f1:
 							f2.write(line)

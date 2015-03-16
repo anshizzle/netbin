@@ -204,7 +204,6 @@ class netbin_udp:
 	                print fh + " ACK'D"
 	                break
 	        except socket.error:
-				print "am i getting a socket error"
 				self.s_comm.sendto(fh, (addr, constants.LISTEN_PORT))
 				count = count + 1
     

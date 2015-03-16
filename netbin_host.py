@@ -7,6 +7,7 @@ import host_function_handler
 import constants
 from netbin_udp import *
 from util import *
+import ntpath
 
 next_host = 0
 conns = [] # Each connection stored as [Socket, Addr]
@@ -109,7 +110,7 @@ def upload(s, user_input):
 			netbin_f = open(netbin_fh, 'w')
 			netbin_f.close()
 
-			with open(filename, 'r') as f1:
+			with open(file_input[1], 'r') as f1:
 				with open(netbin_fh, 'w') as f2:
 					for line in f1:
 						f2.write(line)
