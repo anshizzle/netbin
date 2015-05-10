@@ -25,19 +25,21 @@ pAddress = []
 my_ip = ""
 ##FIND THE SUBNET MASK
 subnet = ""
-enArray = [ x for x in netifaces.interfaces() if x.startswith('en') ]
+netArray = [ x for x in netifaces.interfaces() if x.startswith('en') ]
 #if not enArray: enArray = [ x for x in netifaces.interfaces() if x.startswith('eth') ]
 
-if(enArray):
-	for en in enArray:
-		printDebug(str(netifaces.ifaddresses(en).keys()), "i")
-		bcTuple = netifaces.ifaddresses(en)
-		if (2 in bcTuple):
-			printDebug(str(bcTuple[2]), "i")
-			if ('broadcast' in bcTuple[2][0]):
-				subnet = re.match("^\d+.\d+.[^.]", bcTuple[2][0]['broadcast']).group(0)+'.'
-				my_ip = bcTuple[2][0]['addr']
-				break
+if not netArray:
+	netArray = netifaces.interfaces()
+	
+for en in netArray:
+	printDebug(str(netifaces.ifaddresses(en).keys()), "i")
+	bcTuple = netifaces.ifaddresses(en)
+	if (2 in bcTuple):
+		printDebug(str(bcTuple[2]), "i")
+		if ('broadcast' in bcTuple[2][0]):
+			subnet = re.match("^\d+.\d+.[^.]", bcTuple[2][0]['broadcast']).group(0)+'.'
+			my_ip = bcTuple[2][0]['addr']
+			break
 
 ## IF NO SUBNET FOUND, TERMINATE
 if(subnet == ""):
