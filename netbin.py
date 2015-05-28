@@ -13,7 +13,7 @@ from util import *
 def send_is_host_query(subnet, sock, m_range):
 	for i in m_range:
 		try:
-			sock.sendto("ISHOST", (subnet+str(i), constants.HOST_LISTEN_PORT))
+			sock.sendto("ISHOST?", (subnet+str(i), constants.HOST_LISTEN_PORT))
 		except socket.error as serr:
 			printDebug("Socket Error No " + str(serr.errno) +":" + subnet+str(i), "i")
 
@@ -53,6 +53,8 @@ chunk_size = len(pAddress)/16
 address_groups = [pAddress[i:i+chunk_size] for i in range(0, len(pAddress), chunk_size)]
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+sock.bind((my_ip,constants.COMMUNICATE_PORT))
 
 for li in address_groups:
 	start_new_thread(send_is_host_query, (subnet, sock, li, ))
