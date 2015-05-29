@@ -127,8 +127,6 @@ def upload(s, user_input):
 ## Lists all files
 def list(): 
 	num_files = len(file_list)
-	
-
 	if num_files > 0:
 		print constants.list_file_num_string(num_files)
 		for fp in file_list:
