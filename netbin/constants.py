@@ -17,7 +17,7 @@ EXIT_CMDS = ["exit", "quit", "q"]
 FILE_END_SIGNAL = "EOFAFD12039!!^^"
 LIST_ITEM_DELIMITER = "|,.|"
 
-NETBIN_DIR = "Netbin/"
+NETBIN_DIR = "netbin_files/"
 
 INVALID_FILE_UPLOAD = "File not found"
 
