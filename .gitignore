@@ -2,3 +2,6 @@
 *.pyo
 netbin_files
 test_dir
+Netbin.egg-info
+build
+dist

@@ -1,6 +1,3 @@
-"""
-{{ cookiecutter.project_short_description }}
-"""
 from setuptools import find_packages, setup
 
 dependencies = ['netifaces']
@@ -19,6 +16,11 @@ setup(
     zip_safe=False,
     platforms='any',
     install_requires=dependencies,
+    entry_points={
+        'console_scripts': [
+            'netbin=netbin.netbin_core:main'
+        ]
+    },
     
     classifiers=[
         # As from http://pypi.python.org/pypi?%3Aaction=list_classifiers
