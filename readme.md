@@ -1,4 +1,4 @@
-Anshul Jain (AJ) and Marc Lindsay
+Anshul Jain (AJ) and Marc Lindsay, Chris @anasian, Richard
 
 One thing I realized we need to do - 
 
@@ -14,12 +14,13 @@ One thing I realized we need to do -
 
 
 Transferring host reponsibilities
-
 Receiving Host responsibilities
-
 Having host operate as client.
+Documentation
 
 
-TODO:
-	- TRANSFER HOST RESPONSIBILITIES
-	- Multithread for large files.
+Install Netbin:
+
+```
+> python setup.py install
+```

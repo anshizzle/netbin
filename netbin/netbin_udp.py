@@ -29,11 +29,11 @@ def send_udp_message(s, msg, addr):
                 count = count + 1
 
         if count >= 3:
-            printDebug("UDP Message failed to send", "udp")
+            printDebug("UDP Message failed to send to " + str(addr), "udp")
 
 
     except socket.error, msg:
-    	printDebug("UDP Message failed to send", "udp")
+    	printDebug("UDP Message failed to send to " + str(addr), "udp")
 
 
 
@@ -171,7 +171,7 @@ class netbin_udp:
 			os._exit(1)
 		while 1:
 			msg, data, addr = receive_host_message(self.s)
-			if msg == "ISHOST":
+			if msg == "ISHOST?":
 				printDebug("Received ISHOST Request from " + addr[0], "udp")
 				send_udp_message(self.s, "IAMHOST", addr)
 			elif msg == "NEEDTCPPORT":
