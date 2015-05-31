@@ -24,3 +24,9 @@ Install Netbin:
 ```
 > python setup.py install
 ```
+
+Run with
+
+```
+>python netbin
+```
