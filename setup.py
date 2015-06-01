@@ -21,7 +21,6 @@ setup(
             'netbin=netbin.netbin_core:main'
         ]
     },
-    
     classifiers=[
         # As from http://pypi.python.org/pypi?%3Aaction=list_classifiers
         # 'Development Status :: 1 - Planning',
