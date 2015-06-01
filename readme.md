@@ -1,32 +1,41 @@
-Anshul Jain (AJ) and Marc Lindsay, Chris @anasian, Richard
-
-One thing I realized we need to do - 
-
-	-we'll definitely need a host process running netbin host as a server socket managing connections and the file list, otherwise it's not possible to have a background process autostart.
-	-we need a way for new clients to query the network and find the computer running the host.
-	-we need to have connections running in the background.
-	-we do however need a way for clients to maintain and store file segments
-		- architecture ideas: 
-			- Host process begins, calls netbin_host
-			- Client connects, runs netbin_client
-				- lets host know that it exists and is running. if it terminates, then the host
+### About 
+Netbin is a command line filesharing utility for Local Area Networks. Devices on the same subnet can upload and download files using the netbin client.
 
 
 
-Transferring host reponsibilities
-Receiving Host responsibilities
-Having host operate as client.
-Documentation
-
-
-Install Netbin:
+##### Install Netbin:
 
 ```
 > python setup.py install
 ```
 
-Run with
+##### Run Netbin with
 
 ```
->netbin
+> netbin
 ```
+
+#### Commands
+
+Upload files with `> upload filename` or `> ul filename`
+Download files from the directory with `> download src dest`  or `> dl src dest` 
+List files from the directory with `> list` or `> ls`
+Exit the client with `> exit`
+
+
+
+
+### To-Do's
+
+Transferring host reponsibilities and error handling better.
+Documentation
+Have netbin_files dir be created into root path.
+Have netbin init daemonize, and then other processes plug into the netbin client/host
+Encryption
+
+
+####
+Created by Anshul Jain and Marc Lindsay w/ help from Chris and Richard
+
+
+

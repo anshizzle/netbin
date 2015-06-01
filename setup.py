@@ -4,12 +4,12 @@ dependencies = ['netifaces']
 
 setup(
     name='Netbin',
-    version='0.1',
+    version='0.1.0',
     url='https://github.com/mosquito242/netbin',
     license='BSD',
-    author='AJ, Marc, Chris, Richard',
+    author='AJ, Marc',
     author_email='anshul.jain242@gmail.com',
-    description='',
+    description='A utility to host and share files on a local area network',
     long_description=__doc__,
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
@@ -36,7 +36,6 @@ setup(
         'Operating System :: POSIX',
         'Operating System :: MacOS',
         'Operating System :: Unix',
-        'Operating System :: Windows',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
