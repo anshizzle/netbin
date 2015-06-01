@@ -28,5 +28,5 @@ Install Netbin:
 Run with
 
 ```
->python netbin
+>netbin
 ```
