@@ -27,11 +27,11 @@ Exit the client with `> exit`
 
 ### To-Do's
 
-Transferring host reponsibilities and error handling better.
-Documentation
-Have netbin_files dir be created into root path.
-Have netbin init daemonize, and then other processes plug into the netbin client/host
-Encryption
+* Transferring host reponsibilities and error handling better.
+* Documentation
+* Have netbin_files dir be created into root path.
+* Have netbin init daemonize, and then other processes plug into the netbin client/host
+* Encryption
 
 
 ####
